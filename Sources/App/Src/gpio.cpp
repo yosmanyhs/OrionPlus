@@ -2,6 +2,9 @@
 #include "pins.h"
 #include "gpio.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 void Init_GPIO_Pins(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -71,11 +74,12 @@ void Init_GPIO_Pins(void)
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
     /*Configure GPIO pins : Port F */
-    GPIO_InitStruct.Pin = BTN_START_Pin |               // PF6
-                          BTN_HOLD_Pin |                // PF7
-                          BTN_ABORT_Pin;                // PF8    
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pin = BTN_START_Pin |               // PF6  -> EXTI6
+                          BTN_HOLD_Pin |                // PF7  -> EXTI7
+                          BTN_ABORT_Pin;                // PF8  -> EXTI8  
+                          
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
     HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
     /*Configure GPIO pins : Port F */
@@ -113,8 +117,8 @@ void Init_GPIO_Pins(void)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /*Configure GPIO pin : Port G */
-    GPIO_InitStruct.Pin = GLOBAL_FAULT_Pin;             // PG6
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pin = GLOBAL_FAULT_Pin;             // PG6 -> EXTI6
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GLOBAL_FAULT_GPIO_Port, &GPIO_InitStruct);
 
@@ -132,8 +136,8 @@ void Init_GPIO_Pins(void)
     HAL_GPIO_Init(PROBE_INPUT_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pins : Port C */
-    GPIO_InitStruct.Pin = LIM_X_Pin | LIM_Y_Pin | LIM_Z_Pin;  // PC6, PC7, PC8
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pin = LIM_X_Pin | LIM_Y_Pin | LIM_Z_Pin;  // PC6, PC7, PC8  -> EXTI6, 7, 8
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -145,8 +149,16 @@ void Init_GPIO_Pins(void)
     HAL_GPIO_Init(SDCARD_CS_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pins : Port B */
-    GPIO_InitStruct.Pin = KEY_1_Pin | KEY_0_Pin;            // PB8, PB9
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pin = KEY_1_Pin | KEY_0_Pin;            // PB8, PB9 -> EXTI8, 9
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    
+    HAL_NVIC_SetPriority(EXTI9_5_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY, 0);
+    //HAL_NVIC_EnableIRQ(EXTI9_5_IRQn); 
+}
+
+extern "C" void EXTI9_5_IRQHandler(void)
+{
+    __nop();
 }

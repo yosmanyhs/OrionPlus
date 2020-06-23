@@ -80,7 +80,13 @@ int Settings_Manager::Load()
 
 void Settings_Manager::Save()
 {
+    const uint32_t FLASH_PAGE_SIZE = 256;
+    
+    uint32_t bytes_to_write;
     uint32_t new_crc = HAL_CRC_Calculate(&CrcHandle, (uint32_t*)m_data, SETTINGS_DATA_SIZE_WORDS_NO_CRC);
+    uint32_t addr = SETTINGS_DATA_START_ADDRESS;
+    uint32_t total_len = SETTINGS_DATA_SIZE_BYTES;
+    uint8_t * data_ptr = (uint8_t*)(m_data);
     
     // Only if something changed then update flash    
     if (new_crc != m_data->settings_crc)
@@ -90,9 +96,23 @@ void Settings_Manager::Save()
     
         // Erase sector
         W25QXX_Erase_Sector(SETTINGS_DATA_START_ADDRESS);
-    
-        // Write data (less than 256 bytes)
-        W25QXX_Write_Page((uint8_t*)m_data, SETTINGS_DATA_START_ADDRESS, SETTINGS_DATA_SIZE_BYTES);
+        
+        while (total_len != 0)
+        {    
+            // Restrict data count to max page size
+            if (total_len > FLASH_PAGE_SIZE)
+                bytes_to_write = FLASH_PAGE_SIZE;
+            else
+                bytes_to_write = total_len;
+            
+            // Write data page (up to 256 bytes)
+            W25QXX_Write_Page(data_ptr, addr, bytes_to_write);
+            
+            // Update address, data pointer & remaining length
+            total_len -= bytes_to_write;
+            addr += bytes_to_write;
+            data_ptr += bytes_to_write;
+        }
     }
 }
 

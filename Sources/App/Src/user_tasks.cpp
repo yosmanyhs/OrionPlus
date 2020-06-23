@@ -25,6 +25,7 @@ void Init_UserTasks_and_Objects(void)
     
     global_task_info.gcode_str_queue_handle = xQueueCreate(GCODE_STRING_QUEUE_ITEM_COUNT, sizeof(char*));
     global_task_info.gcode_result_queue_handle = xQueueCreate(GCODE_STRING_QUEUE_ITEM_COUNT, sizeof(int32_t));
+    global_task_info.input_events_handle = xEventGroupCreate();
     
     // Associate different parts
     global_task_info.step_ticker_ptr->Associate_Conveyor(global_task_info.conveyor_ptr);

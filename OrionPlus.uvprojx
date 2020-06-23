@@ -652,6 +652,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_crc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_exti.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2000,6 +2005,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_crc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_exti.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3347,6 +3357,11 @@
               <FileName>stm32f4xx_hal_crc.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_exti.c</FilePath>
             </File>
           </Files>
         </Group>
