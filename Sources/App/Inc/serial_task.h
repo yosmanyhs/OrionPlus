@@ -5,7 +5,7 @@
 #include "task.h"
 
 #define RX_BUFFER_SIZE  256
-#define TX_BUFFER_SIZE  128
+#define TX_BUFFER_SIZE  256
 
 extern TaskHandle_t serial_task_handle;
 

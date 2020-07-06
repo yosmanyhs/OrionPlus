@@ -16,9 +16,6 @@
 
 #include "GCodeParser.h"
 
-
-const uint32_t  RX_LINE_NOTIFY_VALUE        (1 << 0);
-
 TaskHandle_t serial_task_handle;
 
 static StreamBufferHandle_t     rx_buffer;
@@ -40,11 +37,12 @@ static StreamBufferHandle_t     tx_buffer;
 
 void SerialTask_Entry(void * pvParam)
 {
+    char ch;
+    char prev_ch;
     char * line_buffer;
-    uint32_t avail_count = 0;
-    uint32_t task_notify_value = 0;
-    uint32_t led_counter = 0;    
+    uint32_t ch_counter = 0;
     int32_t gcode_result;
+    bool allow_processing = false;   
     
     // Create Tx & Rx stream buffers
     rx_buffer = xStreamBufferCreate(RX_BUFFER_SIZE, 1);
@@ -59,37 +57,79 @@ void SerialTask_Entry(void * pvParam)
     /* USART1 interrupt Init */
     __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_RXNE);
     
-    for ( ; ; )
-    {        
-        if (pdPASS == xTaskNotifyWait(ULONG_MAX, ULONG_MAX, &task_notify_value, portMAX_DELAY))
-        {
-            if ((RX_LINE_NOTIFY_VALUE & task_notify_value) != 0)
-            {
-                // Copy received line to line_buffer and process
-                avail_count = xStreamBufferBytesAvailable(rx_buffer);
-                
-                avail_count = xStreamBufferReceive(rx_buffer, (void*)line_buffer, avail_count, 0);
-                line_buffer[avail_count] = '\0';
-                
-                if (++led_counter == 2)
-                {
-                    led_counter = 0;
-                    HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
-                }
+    prev_ch = 0;    
     
-                // Process received data
-                xQueueSendToBack(((GLOBAL_TASK_INFO_TYPE)pvParam)->gcode_str_queue_handle, (const void*)&line_buffer, portMAX_DELAY);
-                
-                // Retrieve response back
-                xQueueReceive(((GLOBAL_TASK_INFO_TYPE)pvParam)->gcode_result_queue_handle, (void*)&gcode_result, portMAX_DELAY);
-                
-                const char* msg = GCodeParser::GetErrorText(gcode_result);
-                
-                // Send back response
-                xStreamBufferSend(tx_buffer, (const void*)msg, strlen(msg), portMAX_DELAY);
-                xStreamBufferSend(tx_buffer, (const void*)("\r\n"), 2, portMAX_DELAY);
-                __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
+    for ( ; ; )
+    {
+        // Try to receive data from serial stream
+        if (1 == xStreamBufferReceive(rx_buffer, (void*)&ch, 1, portMAX_DELAY))
+        {
+            if (ch_counter < (RX_BUFFER_SIZE + 1))
+            {
+                // We still have space available in the line buffer
+                if (ch == '\n')
+                {
+                    // End of line. Check for previous \r
+                    if (prev_ch == '\r')
+                        ch_counter--;
+                    
+                    line_buffer[ch_counter] = '\0';
+                    
+                    // Reset counter and call to process line 
+                    // Not allow the modification of line_buffer during processing
+                    ch_counter = 0;
+                    prev_ch = 0;    // ???
+                    
+                    allow_processing = true;                    
+                }
+                else if (ch == '\b')
+                {
+                    // Backspace support
+                    if (ch_counter > 0)
+                        ch_counter--;
+                }
+                else
+                {
+                    line_buffer[ch_counter++] = ch;
+                    prev_ch = ch;
+                }
             }
+            else
+            {
+                // There is no more space available. Send the line 'as is'. 
+                line_buffer[RX_BUFFER_SIZE] = '\0';
+                allow_processing = true;
+            }
+        }
+
+        if (allow_processing == true)
+        {
+            int len;
+            
+            xQueueSendToBack(((GLOBAL_TASK_INFO_TYPE)pvParam)->gcode_str_queue_handle, (const void*)&line_buffer, portMAX_DELAY);
+                    
+            // Retrieve response back
+            xQueueReceive(((GLOBAL_TASK_INFO_TYPE)pvParam)->gcode_result_queue_handle, (void*)&gcode_result, portMAX_DELAY);
+            
+            
+            const char* msg = GCodeParser::GetErrorText(gcode_result);
+            
+            // Send back response
+            len = strlen(line_buffer);
+            
+            if (len != 0)
+            {            
+                xStreamBufferSend(tx_buffer, (const void*)line_buffer, len, portMAX_DELAY);
+                xStreamBufferSend(tx_buffer, (const void*)(" >> "), 4, portMAX_DELAY);
+            }
+            
+            xStreamBufferSend(tx_buffer, (const void*)msg, strlen(msg), portMAX_DELAY);
+            xStreamBufferSend(tx_buffer, (const void*)("\n"), 1, portMAX_DELAY);
+            __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
+    
+            memset(line_buffer, 0, RX_BUFFER_SIZE+1);
+            allow_processing = false;
+            
         }
     }
 }
@@ -109,13 +149,9 @@ extern "C" void USART1_IRQHandler(void)
         // Rx Interrupt
         ch = (char)debug_uart_handle.Instance->DR;
         
-        // Ignore \r and notify task when receive \n
-        if (ch != '\r')
+        if (0 == xStreamBufferSendFromISR(rx_buffer, (const void*)&ch, 1, &highPrioWokenRx))
         {
-            if (ch == '\n') // Don't store \n
-                xTaskNotifyFromISR(serial_task_handle, RX_LINE_NOTIFY_VALUE, eSetBits, &highPrioWokenLine);
-            else
-                xStreamBufferSendFromISR(rx_buffer, (const void*)&ch, 1, &highPrioWokenRx);
+           __nop();
         }
     }
     
