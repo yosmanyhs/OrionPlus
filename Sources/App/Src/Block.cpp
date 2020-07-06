@@ -139,8 +139,8 @@ void Block::calculate_trapezoid(float entryspeed, float exitspeed)
     //uint32_t plateau_ticks = total_move_ticks - acceleration_ticks - deceleration_ticks;
 
     // Now we figure out the acceleration value to reach EXACTLY maximum_rate(steps/s) in EXACTLY acceleration_ticks(ticks) amount of time in seconds
-    float acceleration_time = acceleration_ticks / STEP_TICKER_FREQUENCY;  // This can be moved into the operation below, separated for clarity, note we need to do this instead of using time_to_accelerate(seconds) directly because time_to_accelerate(seconds) and acceleration_ticks(seconds) do not have the same value anymore due to the rounding
-    float deceleration_time = deceleration_ticks / STEP_TICKER_FREQUENCY;
+    float acceleration_time = ((float)(acceleration_ticks)) / STEP_TICKER_FREQUENCY;  // This can be moved into the operation below, separated for clarity, note we need to do this instead of using time_to_accelerate(seconds) directly because time_to_accelerate(seconds) and acceleration_ticks(seconds) do not have the same value anymore due to the rounding
+    float deceleration_time = ((float)(deceleration_ticks)) / STEP_TICKER_FREQUENCY;
 
     float acceleration_in_steps = (acceleration_time > 0.0F ) ? ( this->maximum_rate - initial_rate ) / acceleration_time : 0;
     float deceleration_in_steps =  (deceleration_time > 0.0F ) ? ( this->maximum_rate - final_rate ) / deceleration_time : 0;
