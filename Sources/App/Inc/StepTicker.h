@@ -21,7 +21,7 @@ public:
     ~StepTicker();
     
     void set_frequency( float frequency );
-    void set_unstep_time( float microseconds );
+    void set_unstep_time( uint8_t microseconds );
     
     float get_frequency() const { return frequency; }
     void unstep_tick();
@@ -29,10 +29,15 @@ public:
     const Block *get_current_block() const { return current_block; }
 
     void step_tick (void);
-    void handle_finish (void);
     void start();
     
     void Associate_Conveyor(Conveyor* conv) { m_conveyor = conv; }
+    inline void EnableMotor(uint8_t axis) { this->motor_enable_bits |= (1 << axis); }
+    inline void DisableMotor(uint8_t axis) { this->motor_enable_bits &= (~(1 << axis)); }
+    
+    void ApplyUpdatedInversionMasks();
+    void ResetStepperDrivers(bool reset);
+    void EnableStepperDrivers(bool enable);
 
     static StepTicker *getInstance() { return instance; }
 
@@ -43,6 +48,9 @@ private:
 
     float frequency;
     uint32_t period;
+
+    uint8_t inversion_mask_bits_steps;
+    uint8_t inversion_mask_bits_dirs;
 
     uint8_t unstep_bits;
 

@@ -15,17 +15,23 @@
  *  Enab  Rset  GFlt                          LimZ            
  *
  *   07    06    05    04    03    02    01    00
- *  LimY  LimX  DirZ  StpZ  DirY  StpY  DirX  StpX
+ *  LimY  LimX  DirX  StpX  DirY  StpY  DirZ  StpZ
  */
-#define SIGNAL_INVERT_STEP_X            (1 << 0)
-#define SIGNAL_INVERT_DIR_X             (1 << 1)
+#define SIGNAL_INVERT_STEP_Z            (1 << 0)
+#define SIGNAL_INVERT_DIR_Z             (1 << 1)
 #define SIGNAL_INVERT_STEP_Y            (1 << 2)
 #define SIGNAL_INVERT_DIR_Y             (1 << 3)
-#define SIGNAL_INVERT_STEP_Z            (1 << 4)
-#define SIGNAL_INVERT_DIR_Z             (1 << 5)
+#define SIGNAL_INVERT_STEP_X            (1 << 4)
+#define SIGNAL_INVERT_DIR_X             (1 << 5)
+
+#define SIGNAL_INVERT_STEP_PINS_MASK    ((1 << 4) | (1 << 2) | (1 << 0))    // 00010101 = 0x15
+#define SIGNAL_INVERT_DIR_PINS_MASK     ((1 << 5) | (1 << 3) | (1 << 1))    // 00101010 = 0x2A
+
 #define SIGNAL_INVERT_LIM_X             (1 << 6)
 #define SIGNAL_INVERT_LIM_Y             (1 << 7)
 #define SIGNAL_INVERT_LIM_Z             (1 << 8)
+
+#define SIGNAL_INVERT_LIMIT_PINS_MASK   ((1 << 8) | (1 << 7) | (1 << 6))
 
 #define SIGNAL_INVERT_GLB_FLT           (1 << 13)
 #define SIGNAL_INVERT_STP_RST           (1 << 14)
@@ -40,7 +46,7 @@ typedef union STEPPER_CONTROL_DATA
     {
         uint16_t    signal_invert_mask; // Bitmap of inversion masks for signals
         uint8_t     step_pulse_len_us;  // Duration of high level on step's pulses
-        uint8_t     step_idle_lock_ms;  // Time to keep enabled stepper motos after stop
+        uint8_t     step_idle_lock_secs;  // Time to keep enabled stepper motos after stop
     }S;
 }STEPPER_CONTROL_DATA;
 
@@ -110,7 +116,7 @@ public:
 	static int WriteCoordinateValues(uint32_t coord_index, const float * buffer);
 
     static inline uint16_t GetSignalInversionMasks() { return m_data->step_ctrl.S.signal_invert_mask; }
-    static inline uint32_t GetIdleLockTime_ms() { return m_data->step_ctrl.S.step_idle_lock_ms; }
+    static inline uint32_t GetIdleLockTime_secs() { return m_data->step_ctrl.S.step_idle_lock_secs; }
     static inline uint32_t GetPulseLenTime_us() { return m_data->step_ctrl.S.step_pulse_len_us; }
 
     static void SetActiveCoordinateSystemIndex(uint32_t index) { m_data->active_coord_system = index; }
@@ -122,8 +128,12 @@ public:
     static inline float GetMaxSpeed_mm_sec_axis(uint32_t axis) { return (m_data->max_rate_mm_sec_axes[axis]); }
     static inline const float* GetMaxSpeed_mm_sec_all_axes() { return (m_data->max_rate_mm_sec_axes); }
     
+    static inline void SetMaxSpeed_mm_sec_axis(uint32_t axis, float value) { m_data->max_rate_mm_sec_axes[axis] = value; }
+    
     static inline float GetAcceleration_mm_sec2_axis(uint32_t axis) { return (m_data->accel_mm_sec2_axes[axis]); }
     static inline const float* GetAcceleration_mm_sec2_all_axes() { return (m_data->accel_mm_sec2_axes); }
+    
+    static inline void SetAcceleration_mm_sec2_axis(uint32_t axis, float value) { m_data->accel_mm_sec2_axes[axis] = value; }
     
     static inline float GetJunctionDeviation_mm() { return m_data->junction_deviation_mm; }
     static inline void  SetJunctionDeviation_mm(float jd_value) { m_data->junction_deviation_mm = jd_value; }

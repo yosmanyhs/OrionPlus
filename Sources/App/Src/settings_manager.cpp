@@ -125,7 +125,7 @@ void Settings_Manager::ResetToDefaults()
     m_data->step_ctrl.AsWord32 = 0x00000000;
     
     m_data->step_ctrl.S.step_pulse_len_us = 10;
-    m_data->step_ctrl.S.step_idle_lock_ms = 200;
+    m_data->step_ctrl.S.step_idle_lock_secs = 30;
     
     m_data->junction_deviation_mm = 0.002f;
     m_data->arc_tolerance_mm = 0.002f;
@@ -153,9 +153,9 @@ void Settings_Manager::ResetToDefaults()
     m_data->max_rate_mm_sec_axes[1] = 20.0f;
     m_data->max_rate_mm_sec_axes[2] = 20.0f;
     
-    m_data->accel_mm_sec2_axes[0] = 0.03333f;  // 120 mm/min2 / 3600 -> 0.03333 mm/sec2
-    m_data->accel_mm_sec2_axes[1] = 0.03333f;
-    m_data->accel_mm_sec2_axes[2] = 0.03333f;
+    m_data->accel_mm_sec2_axes[0] = 2.0f;  // 120 mm/min2 / 3600 -> 0.03333 mm/sec2
+    m_data->accel_mm_sec2_axes[1] = 2.0f;
+    m_data->accel_mm_sec2_axes[2] = 2.0f;
     
     m_data->spindle_min_rpm = 0.0f;
     m_data->spindle_max_rpm = 10000.0f;
