@@ -355,6 +355,64 @@ int GCodeParser::ParseLine(char * line)
                         success_bits = MODAL_GROUP_M8_BIT;
                         break;
                     
+                    // Testing [Values must be specified before M32 & M36]
+                    case 32:    // M32 update speeds [max rate mm/min]
+                    {
+                        float fval;
+                        
+                        if ((m_value_group_flags & VALUE_SET_X_BIT) != 0)
+                        {
+                            // Values specified in mm/min -> convert to mm/sec
+                            fval = m_block_data.coordinate_data[COORD_X] / 60.0f;
+                            Settings_Manager::SetMaxSpeed_mm_sec_axis(COORD_X, fval);
+                        }
+                        
+                        if ((m_value_group_flags & VALUE_SET_Y_BIT) != 0)
+                        {
+                            fval = m_block_data.coordinate_data[COORD_Y] / 60.0f;
+                            Settings_Manager::SetMaxSpeed_mm_sec_axis(COORD_Y, fval);
+                        }
+                        
+                        if ((m_value_group_flags & VALUE_SET_Z_BIT) != 0)
+                        {
+                            fval = m_block_data.coordinate_data[COORD_Z] / 60.0f;
+                            Settings_Manager::SetMaxSpeed_mm_sec_axis(COORD_Z, fval);
+                        }
+                    }
+                    break;
+                    
+                    case 36:    // M36 [Update accelerations mm/min2]
+                    {
+                        float fval;
+                        
+                        // Values specified in mm/min2 -> convert to mm/sec2 (div 3600)
+                        
+                        if ((m_value_group_flags & VALUE_SET_X_BIT) != 0)
+                        {
+                            fval = m_block_data.coordinate_data[COORD_X] / 3600.0f;
+                            Settings_Manager::SetAcceleration_mm_sec2_axis(COORD_X, fval);
+                        }
+                        
+                        if ((m_value_group_flags & VALUE_SET_Y_BIT) != 0)
+                        {
+                            fval = m_block_data.coordinate_data[COORD_Y] / 3600.0f;
+                            Settings_Manager::SetAcceleration_mm_sec2_axis(COORD_Y, fval);
+                        }
+                        
+                        if ((m_value_group_flags & VALUE_SET_Z_BIT) != 0)
+                        {
+                            fval = m_block_data.coordinate_data[COORD_Z] / 3600.0f;
+                            Settings_Manager::SetAcceleration_mm_sec2_axis(COORD_Z, fval);
+                        }
+                    }
+                    break;
+                    
+                    case 38:   // M38 Save settings to flash
+                    {
+                        Settings_Manager::Save();
+                    }
+                    break;
+                    
                     default:
                     {
                         // Should not arrive here.
@@ -1886,7 +1944,7 @@ int GCodeParser::motion_append_line(const float * target_pos)
     // Finally call the planner to append a new block.
     if (m_planner != NULL)
     {
-        float move_rate = (m_parser_modal_state.motion_mode == MODAL_MOTION_MODE_SEEK) ? SOME_LARGE_VALUE : m_block_data.feed_rate;
+        float move_rate = (m_parser_modal_state.motion_mode == MODAL_MOTION_MODE_SEEK) ? SOME_LARGE_VALUE : (m_block_data.feed_rate / 60.0f);
         bool inverse_time_rate = (m_parser_modal_state.feedrate_mode == MODAL_FEEDRATE_MODE_INVERSE_TIME) ? true : false;
         
         return m_planner->AppendLine(target_pos, m_spindle_speed, move_rate, inverse_time_rate);

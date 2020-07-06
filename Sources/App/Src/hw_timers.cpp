@@ -61,11 +61,10 @@ void Init_Unstep_Timer6(void)
     sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
     
     HAL_TIMEx_MasterConfigSynchronization(&unstep_timer_handle, &sMasterConfig);
+    HAL_TIM_OnePulse_Init(&unstep_timer_handle, TIM_OPMODE_SINGLE);
     
     __HAL_DBGMCU_FREEZE_TIM6();
     __HAL_TIM_CLEAR_IT(&unstep_timer_handle, TIM_IT_UPDATE);
-    
-    HAL_TIM_OnePulse_Init(&unstep_timer_handle, TIM_OPMODE_SINGLE);
 }
 
 /* TIM4 init function */
