@@ -3,6 +3,7 @@
 #include "task.h"
 #include "pins.h"
 
+#include "gpio.h"
 #include "lvgl.h"
 
 #include "user_tasks.h"
@@ -23,13 +24,14 @@ extern "C" void vApplicationIdleHook( void )
     if (global_task_info.ready_to_use == true)
     {
         if (counter == 0)
-            global_task_info.conveyor_ptr->on_idle(NULL);
+            global_task_info.conveyor_ptr->on_idle();
     }
 }
 
 extern "C" void vApplicationTickHook( void )
 {
     lv_tick_inc(1);
+    user_button_read_function();
 }
 
 extern "C" void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName )

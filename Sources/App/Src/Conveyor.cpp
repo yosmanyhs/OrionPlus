@@ -12,7 +12,13 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include <stm32f4xx_hal.h>
+
 #include "hw_timers.h"
+#include "gpio.h"
+#include "pins.h"
+
+#include "user_tasks.h"
 
 /*
  * The conveyor holds the queue of blocks, takes care of creating them, and starting the executing chain of blocks
@@ -40,6 +46,8 @@
  *
  * Thus, our two ringbuffers exist sharing the one ring of blocks, and we safely marshall used blocks from ISR context to IDLE context for safe cleanup.
  */
+ 
+ extern GLOBAL_TASK_INFO_STRUCT_TYPE global_task_info;
 
 Conveyor::Conveyor()
 {
@@ -47,12 +55,6 @@ Conveyor::Conveyor()
     allow_fetch = false;
     flush= false;
     current_feedrate = 0;
-}
-
-void Conveyor::on_module_loaded()
-{
-    queue_size = (32);
-    queue_delay_time_ms = (100);
 }
 
 // we allocate the queue here after config is completed so we do not run out of memory during config
@@ -69,7 +71,7 @@ void Conveyor::on_halt(void* argument)
         flush_queue();
 }
 
-void Conveyor::on_idle(void*)
+void Conveyor::on_idle()
 {
     if (running)
         check_queue();
@@ -161,18 +163,27 @@ void Conveyor::queue_head_block()
     queue.produce_head();
 
     // not sure if this is the correct place but we need to turn on the motors if they were not already on
-    //THEKERNEL->call_event(ON_ENABLE, (void*)1); // turn all enable pins on
-    __HAL_TIM_ENABLE(&step_timer_handle);
+    
+    // turn all enable pins on
+    global_task_info.step_ticker_ptr->EnableStepperDrivers(true);
 }
 
 void Conveyor::check_queue(bool force)
 {
     static uint32_t last_time_check = xTaskGetTickCount();
+    static bool idle_timer_running = false;
 
     if (queue.is_empty()) 
     {
         allow_fetch = false;
         last_time_check = xTaskGetTickCount(); // reset timeout
+        
+        if (idle_timer_running == false)
+        {
+            xTimerStart(global_task_info.stepper_idle_timer, 0);
+            idle_timer_running = true;
+        }
+        
         return;
     }
 
@@ -186,6 +197,17 @@ void Conveyor::check_queue(bool force)
         {
             allow_fetch = true;
             __HAL_TIM_ENABLE(&step_timer_handle);
+            
+            // Turn On Activity LED [Write 0]
+            HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+            
+            if (idle_timer_running == true)
+            {
+                // Stop and reset idling timer
+                xTimerReset(global_task_info.stepper_idle_timer, 0);
+                xTimerStop(global_task_info.stepper_idle_timer, 0);
+                idle_timer_running = false;
+            }
         }
         
         return;

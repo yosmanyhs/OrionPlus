@@ -4,6 +4,7 @@
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "event_groups.h"
+#include "timers.h"
 
 #include "GCodeParser.h"
 #include "Planner.h"
@@ -24,6 +25,8 @@ typedef struct GLOBAL_TASK_INFO_STRUCT_TYPE
     QueueHandle_t       gcode_str_queue_handle;
     QueueHandle_t       gcode_result_queue_handle;
     EventGroupHandle_t  input_events_handle;
+    
+    TimerHandle_t       stepper_idle_timer;
 
 }GLOBAL_TASK_INFO_STRUCT_TYPE, *GLOBAL_TASK_INFO_TYPE;
 

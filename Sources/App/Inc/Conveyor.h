@@ -26,8 +26,7 @@ public:
     Conveyor();
     void start();
 
-    void on_module_loaded(void);
-    void on_idle(void *);
+    void on_idle();
     void on_halt(void *);
 
     void wait_for_idle(bool wait_for_motors=true);

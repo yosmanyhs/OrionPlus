@@ -49,8 +49,6 @@ class Block
         float max_allowable_speed( float acceleration, float target_velocity, float distance);
         void prepare(float acceleration_in_steps, float deceleration_in_steps);
 
-        
-
     public:
         uint32_t steps[TOTAL_AXES_COUNT]; // Number of steps for each axis for this block
         uint32_t steps_event_count;  // Steps for the longest axis
