@@ -4,10 +4,16 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "event_groups.h"
+
+#include "user_tasks.h"
+
+extern GLOBAL_TASK_INFO_STRUCT_TYPE global_task_info;
 
 void Init_GPIO_Pins(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
+    uint32_t exti_pr = 0;
 
     /* GPIO Ports Clock Enable */
     __HAL_RCC_GPIOE_CLK_ENABLE();
@@ -74,12 +80,12 @@ void Init_GPIO_Pins(void)
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
     /*Configure GPIO pins : Port F */
-    GPIO_InitStruct.Pin = BTN_START_Pin |               // PF6  -> EXTI6
-                          BTN_HOLD_Pin |                // PF7  -> EXTI7
-                          BTN_ABORT_Pin;                // PF8  -> EXTI8  
+    GPIO_InitStruct.Pin = BTN_START_Pin |               // PF6
+                          BTN_HOLD_Pin |                // PF7
+                          BTN_ABORT_Pin;                // PF8
                           
     GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
     /*Configure GPIO pins : Port F */
@@ -149,16 +155,103 @@ void Init_GPIO_Pins(void)
     HAL_GPIO_Init(SDCARD_CS_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pins : Port B */
-    GPIO_InitStruct.Pin = KEY_1_Pin | KEY_0_Pin;            // PB8, PB9 -> EXTI8, 9
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+    GPIO_InitStruct.Pin = KEY_1_Pin | KEY_0_Pin;            // PB8, PB9
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
     
+    // Clear Pending register bits (set during configuration)
+    exti_pr = EXTI->PR;
+    EXTI->PR = exti_pr;
+    
     HAL_NVIC_SetPriority(EXTI9_5_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY, 0);
-    //HAL_NVIC_EnableIRQ(EXTI9_5_IRQn); 
+    HAL_NVIC_EnableIRQ(EXTI9_5_IRQn); 
+}
+
+// This function will be called on SysTick hook (each 1ms)
+void user_button_read_function(void)
+{
+    static uint32_t debounce_cntrs[3];
+    
+    if (global_task_info.ready_to_use == false)
+        return;
+    
+    // Read start button
+    if ((BTN_START_GPIO_Port->IDR & BTN_START_Pin) == 0)
+    {
+        if (debounce_cntrs[0] < 50) // ~50 ms 
+            debounce_cntrs[0]++;
+        else
+        {
+            // Assume the button was pressed
+            xEventGroupSetBitsFromISR(global_task_info.input_events_handle, BTN_START_EVENT, NULL);
+            debounce_cntrs[0] = 0;
+        }
+    }
+    
+    if ((BTN_HOLD_GPIO_Port->IDR & BTN_HOLD_Pin) == 0)
+    {
+        if (debounce_cntrs[1] < 50) // ~50 ms 
+            debounce_cntrs[1]++;
+        else
+        {
+            // Assume the button was pressed
+            xEventGroupSetBitsFromISR(global_task_info.input_events_handle, BTN_HOLD_EVENT, NULL);
+            debounce_cntrs[1] = 0;
+        }
+    }
+    
+    if ((BTN_ABORT_GPIO_Port->IDR & BTN_ABORT_Pin) == 0)
+    {
+        if (debounce_cntrs[2] < 50) // ~50 ms 
+            debounce_cntrs[2]++;
+        else
+        {
+            // Assume the button was pressed
+            xEventGroupSetBitsFromISR(global_task_info.input_events_handle, BTN_ABORT_EVENT, NULL);
+            debounce_cntrs[2] = 0;
+        }
+    }
 }
 
 extern "C" void EXTI9_5_IRQHandler(void)
 {
-    __nop();
+    uint32_t pr_value = EXTI->PR;
+    BaseType_t high_prio_woken = pdFALSE;
+    
+    // Check each bit [EXTI6, EXTI7, EXTI8]
+    // EXTI6
+    if ((pr_value & (1 << 6)) != 0)
+    {
+        // EXTI6 can be from PC6 [Limit X] / PG6 [Global Stepper Fault]
+        if (HAL_GPIO_ReadPin(GLOBAL_FAULT_GPIO_Port, GLOBAL_FAULT_Pin) != GPIO_PIN_SET)
+        {
+            // Global Fault = 0. Stepper motors fault condition
+            xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  STEPPER_FAULT_EVENT, &high_prio_woken);
+        }
+        else if (HAL_GPIO_ReadPin(LIM_X_GPIO_Port, LIM_X_Pin) != GPIO_PIN_RESET)
+        {
+            // Limit X = 1
+            xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_X_MIN_EVENT, &high_prio_woken);
+        }
+    }
+    
+    // EXTI7
+    if ((pr_value & (1 << 7)) != 0)
+    {
+        // Limit Y
+        xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_Y_MIN_EVENT, &high_prio_woken);
+    }
+    
+    // EXTI8
+    if ((pr_value & (1 << 8)) != 0)
+    {
+        // Limit Z
+        xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_Z_MIN_EVENT, &high_prio_woken);
+    }
+    
+    // Clear all pending bits
+    EXTI->PR = pr_value;
+    
+    portYIELD_FROM_ISR(high_prio_woken);
 }

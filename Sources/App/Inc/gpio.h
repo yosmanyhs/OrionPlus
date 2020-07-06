@@ -18,6 +18,7 @@
 #define STEPPER_FAULT_EVENT     (1 << 11)
 
 void Init_GPIO_Pins(void);
+void user_button_read_function(void);
 
 #endif
 
