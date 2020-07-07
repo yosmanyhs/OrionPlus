@@ -18,8 +18,6 @@ void HAL_CRC_MspInit(CRC_HandleTypeDef *hcrc)
 // Define m_data as a static member of Settings_Manager class
 SETTINGS_DATA* Settings_Manager::m_data;
 
-bool Settings_Manager::m_soft_endstops_enabled;
-
 void Settings_Manager::Initialize()
 {
     CrcHandle.Instance = CRC;
@@ -63,15 +61,12 @@ int Settings_Manager::Load()
         // Copy data to settings
         memcpy((void*)m_data, (const void*)pData, SETTINGS_DATA_SIZE_BYTES);
         
-        // TODO: Move this to other place
-        m_soft_endstops_enabled = true;
-        
         // Release memory
         vPortFree((void*)pData);
         
         // and exit successfully
         return 0;        
-    }   
+    }
     
     // In any other case, return error.
     ResetToDefaults();
@@ -128,12 +123,12 @@ void Settings_Manager::ResetToDefaults()
     m_data->step_ctrl.S.step_idle_lock_secs = 30;
     
     m_data->junction_deviation_mm = 0.002f;
-    m_data->arc_tolerance_mm = 0.002f;
     
-    m_data->home_seek_rate_mm_sec = 12.50f; // 750 mm/min -> 750/60 mm/sec = 12.5
-    m_data->home_feed_rate_mm_sec = 7.50f; // 450 mm/min -> 450/60 mm/sec = 7.5
-    m_data->home_debounce_ms = 5;
-    m_data->home_pull_off_distance_mm = 1.0f;
+    
+    m_data->homing_data.home_seek_rate_mm_sec = 12.50f; // 750 mm/min -> 750/60 mm/sec = 12.5
+    m_data->homing_data.home_feed_rate_mm_sec = 7.50f; // 450 mm/min -> 450/60 mm/sec = 7.5
+    m_data->homing_data.home_debounce_ms = 5;
+    m_data->homing_data.home_pull_off_distance_mm = 1.0f;
     
     // Microstep = 1/4; 4mm/rev; 4*200 steps/rev => 800/4 = 200 steps/mm
     m_data->steps_per_mm_axes[0] = 200.0f;
@@ -160,7 +155,10 @@ void Settings_Manager::ResetToDefaults()
     m_data->spindle_min_rpm = 0.0f;
     m_data->spindle_max_rpm = 10000.0f;
     
-    m_soft_endstops_enabled = true;
+    m_data->bit_settings.Bits.soft_limits_enabled = true;
+    m_data->bit_settings.Bits.soft_limit_x_enable = true;
+    m_data->bit_settings.Bits.soft_limit_y_enable = true;
+    m_data->bit_settings.Bits.soft_limit_z_enable = true;
 }
 
 // Buffer variable must have space to copy 6 float values
@@ -228,6 +226,13 @@ int Settings_Manager::WriteCoordinateValues(uint32_t coord_index, const float * 
 	return 0;
 }
 
+void Settings_Manager::SetHomingData(const HOMING_SETUP_DATA& updated_data)
+{
+    m_data->homing_data.home_seek_rate_mm_sec = updated_data.home_seek_rate_mm_sec;
+    m_data->homing_data.home_feed_rate_mm_sec = updated_data.home_feed_rate_mm_sec;
+    m_data->homing_data.home_debounce_ms = updated_data.home_debounce_ms;
+    m_data->homing_data.home_pull_off_distance_mm = updated_data.home_pull_off_distance_mm;
+}
 
 void Settings_Manager::Internal_AllocMemory(void)
 {

@@ -50,6 +50,44 @@ typedef union STEPPER_CONTROL_DATA
     }S;
 }STEPPER_CONTROL_DATA;
 
+typedef union GENERAL_SETTINGS_BITFIELD
+{
+    uint32_t AsWord32;
+    
+    struct
+    {
+        uint32_t soft_limits_enabled : 1;
+        
+        uint32_t soft_limit_x_enable : 1;
+        uint32_t soft_limit_y_enable : 1;
+        uint32_t soft_limit_z_enable : 1;
+        
+        uint32_t dummy_fill_bits : 28;
+    }Bits;
+}GENERAL_SETTINGS_BITFIELD;
+
+typedef struct HOMING_SETUP_DATA
+{
+    float       home_seek_rate_mm_sec;
+    float       home_feed_rate_mm_sec;
+    uint32_t    home_debounce_ms;
+    float       home_pull_off_distance_mm;
+}HOMING_SETUP_DATA;
+
+typedef union DISPLAY_SETTINGS
+{
+    uint32_t AsWord32;
+    
+    struct
+    {
+        uint8_t brightness;
+        uint8_t idle_timeout_secs;
+        
+        uint16_t dummy_display_filler;
+    }Control;
+}DISPLAY_SETTINGS;
+
+
 typedef struct SETTINGS_DATA
 {
     uint32_t    settings_header;
@@ -57,12 +95,8 @@ typedef struct SETTINGS_DATA
     union STEPPER_CONTROL_DATA step_ctrl;
     
     float       junction_deviation_mm;  
-    float       arc_tolerance_mm;
     
-    float       home_seek_rate_mm_sec;
-    float       home_feed_rate_mm_sec;
-    uint32_t    home_debounce_ms;
-    float       home_pull_off_distance_mm;
+    struct HOMING_SETUP_DATA homing_data;
 
     float       steps_per_mm_axes[3];
     float       max_travel_mm_axes[3];
@@ -83,7 +117,8 @@ typedef struct SETTINGS_DATA
     float       g30_position[6];
 	float		g92_offsets[6];
     
-    // TODO: Add another uint32_t to contain boolean variables like soft_endstop_enables, etc.
+    union GENERAL_SETTINGS_BITFIELD bit_settings;
+    union DISPLAY_SETTINGS display;
     
     uint32_t    settings_crc;
 
@@ -119,20 +154,24 @@ public:
     static inline uint32_t GetIdleLockTime_secs() { return m_data->step_ctrl.S.step_idle_lock_secs; }
     static inline uint32_t GetPulseLenTime_us() { return m_data->step_ctrl.S.step_pulse_len_us; }
 
-    static void SetActiveCoordinateSystemIndex(uint32_t index) { m_data->active_coord_system = index; }
+    static inline uint32_t GetActiveCoordinateSystemIndex() { return m_data->active_coord_system; }
+    static inline void SetActiveCoordinateSystemIndex(uint32_t index) { m_data->active_coord_system = index; }
     
-    static bool AreSoftLimitsEnabled() { return m_soft_endstops_enabled; }
-    static void EnableSoftLimits() { m_soft_endstops_enabled = true; }
-    static void DisableSoftLimits() { m_soft_endstops_enabled = false; }
+    static inline bool AreSoftLimitsEnabled() { return m_data->bit_settings.Bits.soft_limits_enabled; }
+    static inline bool AreAxisSoftLimitEnabled(uint32_t axis) { return ((m_data->bit_settings.AsWord32 & (1 << axis)) != 0) ? true : false; }
     
-    static inline float GetMaxSpeed_mm_sec_axis(uint32_t axis) { return (m_data->max_rate_mm_sec_axes[axis]); }
+    static inline void EnableAxisSoftLimit(uint32_t axis) { m_data->bit_settings.AsWord32 |= (1 << axis); }
+    static inline void DisableAxisSoftLimit(uint32_t axis) { m_data->bit_settings.AsWord32 &= ~(1 << axis); }
+
+    static inline void EnableSoftLimits() { m_data->bit_settings.Bits.soft_limits_enabled = true; }
+    static inline void DisableSoftLimits() { m_data->bit_settings.Bits.soft_limits_enabled = false; }
+    
     static inline const float* GetMaxSpeed_mm_sec_all_axes() { return (m_data->max_rate_mm_sec_axes); }
-    
+    static inline float GetMaxSpeed_mm_sec_axis(uint32_t axis) { return (m_data->max_rate_mm_sec_axes[axis]); }
     static inline void SetMaxSpeed_mm_sec_axis(uint32_t axis, float value) { m_data->max_rate_mm_sec_axes[axis] = value; }
     
-    static inline float GetAcceleration_mm_sec2_axis(uint32_t axis) { return (m_data->accel_mm_sec2_axes[axis]); }
     static inline const float* GetAcceleration_mm_sec2_all_axes() { return (m_data->accel_mm_sec2_axes); }
-    
+    static inline float GetAcceleration_mm_sec2_axis(uint32_t axis) { return (m_data->accel_mm_sec2_axes[axis]); }
     static inline void SetAcceleration_mm_sec2_axis(uint32_t axis, float value) { m_data->accel_mm_sec2_axes[axis] = value; }
     
     static inline float GetJunctionDeviation_mm() { return m_data->junction_deviation_mm; }
@@ -141,13 +180,20 @@ public:
     static inline float GetStepsPer_mm_Axis(uint32_t ax_idx) { return m_data->steps_per_mm_axes[ax_idx % 3]; }
     static inline void  SetStepsPer_mm_Axis(uint32_t ax_idx, float st_mm) { m_data->steps_per_mm_axes[ax_idx % 3] = st_mm; } 
     
+    static inline float GetMaxTravel_mm_Axis(uint32_t ax_idx) { return m_data->max_travel_mm_axes[ax_idx % 3]; }
+    static inline void  SetMaxTravel_mm_Axis(uint32_t ax_idx, float mt_mm) { m_data->max_travel_mm_axes[ax_idx % 3] = mt_mm; } 
+    
+    static inline const HOMING_SETUP_DATA& GetHomingData() { return m_data->homing_data; };
+    static void SetHomingData(const HOMING_SETUP_DATA& updated_data);
+    
+    static inline void GetSpindleSpeeds(float& min_rpm, float& max_rpm) { min_rpm = m_data->spindle_min_rpm; max_rpm = m_data->spindle_max_rpm; }
+    static inline void SetSpindleSpeeds(const float& mins, const float& maxs) { m_data->spindle_min_rpm = mins; m_data->spindle_max_rpm = maxs; }
+    
 protected:
     
     static void Internal_AllocMemory(void);
 
 	static SETTINGS_DATA * m_data;
-
-    static bool m_soft_endstops_enabled;
 };
 
 #endif

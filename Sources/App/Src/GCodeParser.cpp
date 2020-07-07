@@ -27,6 +27,8 @@ GCodeParser::~GCodeParser(void)
 
 void GCodeParser::ResetParser()
 {
+    uint32_t loop_index;
+    
     m_line = NULL;
     
     m_spindle_speed = 0.0f;
@@ -49,6 +51,13 @@ void GCodeParser::ResetParser()
     memset((void*)m_gcode_machine_pos, 0, sizeof(m_gcode_machine_pos));
 
     memset((void*)&m_block_data, 0, sizeof(m_block_data));
+    
+    // Load some information from settings
+    for (loop_index = COORD_X; loop_index <= COORD_Z; loop_index++)
+    {
+        m_soft_limit_enabled[loop_index] = Settings_Manager::AreAxisSoftLimitEnabled(loop_index);
+        m_soft_limit_max_values[loop_index] = Settings_Manager::GetMaxTravel_mm_Axis(loop_index);
+    }
     
     m_check_mode = false;
     m_feed_hold = false;
@@ -1908,20 +1917,23 @@ int GCodeParser::motion_append_line(const float * target_pos)
     // check soft limits only for homed axis that are enabled
     if (Settings_Manager::AreSoftLimitsEnabled() == true)
     {
-        for (index = 0; index < COORDINATE_LINEAR_AXES_COUNT; index++)
+        for (index = COORD_X; index < COORDINATE_LINEAR_AXES_COUNT; index++)
         {
             // TODO: Add support to detect if currently the machine is homing
             // TODO: Add information to each axis regarding the homed status
             //if(!is_homed(i))
             //    continue;     // skip if we're homing (any axis)/not homed yet (this axis)
 
-            if (this->m_soft_limit_enabled[index] != false)
+            if (index < COORD_A)
             {
-                if ((target_pos[index] < this->m_soft_limit_min_values[index]) ||
-                    (target_pos[index] > this->m_soft_limit_max_values[index]))
+                if (this->m_soft_limit_enabled[index] != false)
                 {
-                    // TODO: Report violation of limit values. Stop the execution of commands.
-                    return GCODE_ERROR_TARGET_OUTSIDE_LIMIT_VALUES;
+                    if ((target_pos[index] < 0.0f) ||
+                        (target_pos[index] > this->m_soft_limit_max_values[index]))
+                    {
+                        // TODO: Report violation of limit values. Stop the execution of commands.
+                        return GCODE_ERROR_TARGET_OUTSIDE_LIMIT_VALUES;
+                    }
                 }
             }
         }

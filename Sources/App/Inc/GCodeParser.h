@@ -537,7 +537,6 @@ public:
         float           m_last_probe_position[TOTAL_AXES_COUNT];
         float           m_gcode_machine_pos[TOTAL_AXES_COUNT];
         
-        float           m_soft_limit_min_values[TOTAL_AXES_COUNT];
         float           m_soft_limit_max_values[TOTAL_AXES_COUNT];
         bool            m_soft_limit_enabled[TOTAL_AXES_COUNT];
 
