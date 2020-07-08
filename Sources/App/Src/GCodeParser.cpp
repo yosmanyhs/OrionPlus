@@ -538,8 +538,8 @@ int GCodeParser::ParseLine(char * line)
                     
                     // Feed Rate Mode G Codes [Group 5]
                     // ----------------------------------------------------------------------------
-                    case MODAL_FEEDRATE_MODE_UNITS_PER_MIN: // G93
-                    case MODAL_FEEDRATE_MODE_INVERSE_TIME:  // G94
+                    case MODAL_FEEDRATE_MODE_UNITS_PER_MIN: // G94
+                    case MODAL_FEEDRATE_MODE_INVERSE_TIME:  // G93
                     {
                         m_block_data.block_modal_state.feedrate_mode = (GCODE_MODAL_FEEDRATE_MODES)work_var;
                         success_bits = MODAL_GROUP_G5_BIT;
@@ -1958,6 +1958,10 @@ int GCodeParser::motion_append_line(const float * target_pos)
     {
         float move_rate = (m_parser_modal_state.motion_mode == MODAL_MOTION_MODE_SEEK) ? SOME_LARGE_VALUE : (m_block_data.feed_rate / 60.0f);
         bool inverse_time_rate = (m_parser_modal_state.feedrate_mode == MODAL_FEEDRATE_MODE_INVERSE_TIME) ? true : false;
+        
+        // Inverse time feed rate mode does not affect Seek Movements
+        if (m_parser_modal_state.motion_mode == MODAL_MOTION_MODE_SEEK)
+            inverse_time_rate = false;
         
         return m_planner->AppendLine(target_pos, m_spindle_speed, move_rate, inverse_time_rate);
     }

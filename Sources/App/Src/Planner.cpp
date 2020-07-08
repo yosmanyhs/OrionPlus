@@ -36,7 +36,6 @@ int Planner::AppendLine(const float* target_mm, float spindle_speed, float rate_
     
     Block* block = m_conveyor->queue.head_ref();
     
-    
     for (index = COORD_X; index < TOTAL_AXES_COUNT; index++)
     {
         // Calculate how many steps from mm and steps per mm settings
@@ -76,6 +75,10 @@ int Planner::AppendLine(const float* target_mm, float spindle_speed, float rate_
     
     // Limit rate_mm_s value to maximum allowed    
     rate_mm_s = limit_value_by_axis_maximum(rate_mm_s, Settings_Manager::GetMaxSpeed_mm_sec_all_axes(), unit_vec);
+    
+    // In case of inverse time feed rate mode convert to regular feed rate
+    if (inverseTimeRate == true)
+        rate_mm_s *= distance;
     
     // Limit acceleration value to maximum allowed
     block->acceleration = limit_value_by_axis_maximum(SOME_LARGE_VALUE, Settings_Manager::GetAcceleration_mm_sec2_all_axes(), unit_vec);
