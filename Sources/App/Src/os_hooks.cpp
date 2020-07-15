@@ -31,7 +31,6 @@ extern "C" void vApplicationIdleHook( void )
 extern "C" void vApplicationTickHook( void )
 {
     lv_tick_inc(1);
-    user_button_read_function();
 }
 
 extern "C" void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName )

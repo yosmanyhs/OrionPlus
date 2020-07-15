@@ -168,52 +168,6 @@ void Init_GPIO_Pins(void)
     HAL_NVIC_EnableIRQ(EXTI9_5_IRQn); 
 }
 
-// This function will be called on SysTick hook (each 1ms)
-void user_button_read_function(void)
-{
-    static uint32_t debounce_cntrs[3];
-    
-    if (global_task_info.ready_to_use == false)
-        return;
-    
-    // Read start button
-    if ((BTN_START_GPIO_Port->IDR & BTN_START_Pin) == 0)
-    {
-        if (debounce_cntrs[0] < 50) // ~50 ms 
-            debounce_cntrs[0]++;
-        else
-        {
-            // Assume the button was pressed
-            xEventGroupSetBitsFromISR(global_task_info.input_events_handle, BTN_START_EVENT, NULL);
-            debounce_cntrs[0] = 0;
-        }
-    }
-    
-    if ((BTN_HOLD_GPIO_Port->IDR & BTN_HOLD_Pin) == 0)
-    {
-        if (debounce_cntrs[1] < 50) // ~50 ms 
-            debounce_cntrs[1]++;
-        else
-        {
-            // Assume the button was pressed
-            xEventGroupSetBitsFromISR(global_task_info.input_events_handle, BTN_HOLD_EVENT, NULL);
-            debounce_cntrs[1] = 0;
-        }
-    }
-    
-    if ((BTN_ABORT_GPIO_Port->IDR & BTN_ABORT_Pin) == 0)
-    {
-        if (debounce_cntrs[2] < 50) // ~50 ms 
-            debounce_cntrs[2]++;
-        else
-        {
-            // Assume the button was pressed
-            xEventGroupSetBitsFromISR(global_task_info.input_events_handle, BTN_ABORT_EVENT, NULL);
-            debounce_cntrs[2] = 0;
-        }
-    }
-}
-
 extern "C" void EXTI9_5_IRQHandler(void)
 {
     uint32_t pr_value = EXTI->PR;
