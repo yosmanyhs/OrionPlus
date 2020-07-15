@@ -221,7 +221,7 @@ void Planner::recalculate()
      * For each block, given the exit speed and acceleration, find the maximum entry speed
      */
 
-    float entry_speed = m_minimum_planner_speed;
+    float entry_speed = 0.0f;
 
     block_index = m_conveyor->queue.head_i;
     current     = m_conveyor->queue.item_ref(block_index);
@@ -268,7 +268,7 @@ void Planner::recalculate()
 
     // now current points to the head item
     // which has not had calculate_trapezoid run yet
-    current->calculate_trapezoid(current->entry_speed, m_minimum_planner_speed);
+    current->calculate_trapezoid(current->entry_speed, 0.0f);
 }
 
 

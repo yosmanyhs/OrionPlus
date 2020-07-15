@@ -92,9 +92,14 @@ enum GCODE_STATUS_RESULTS
     GCODE_ERROR_COORD_DATA_IN_G80_CODE, 
     
     GCODE_ERROR_MISSING_COORDS_IN_PLANE,    // 38
-    GCODE_ERROR_INVALID_TARGET_FOR_ARC,
+    GCODE_ERROR_INVALID_TARGET_FOR_R_ARC,
+    GCODE_ERROR_INVALID_TARGET_FOR_OFS_ARC,
     GCODE_ERROR_INVALID_TARGET_FOR_PROBE,
-    GCODE_ERROR_UNUSED_VALUE_WORDS,
+    GCODE_ERROR_UNUSED_OFFSET_VALUE_WORDS,
+    GCODE_ERROR_UNUSED_L_VALUE_WORD,
+    GCODE_ERROR_UNUSED_P_VALUE_WORD,
+    GCODE_ERROR_UNUSED_Q_VALUE_WORD,
+    GCODE_ERROR_UNUSED_R_VALUE_WORD,
 
     GCODE_ERROR_USING_COORDS_NO_MOTION_MODE, // 42
     GCODE_ERROR_INVALID_G53_DISTANCE_MODE,
@@ -509,7 +514,7 @@ public:
         DwellCommandFnPtr       DwellCommandFn;
         HomingCommandFnPtr      HomingCommandFn;
         MotionCommandFnPtr      MotionCommandFn;
-        WaitingCommandFnPtr     WaitCommandFn;
+        WaitingCommandFnPtr     WaitForIdleCommandFn;
 
         static const char*  GetErrorText(uint32_t error_code);
 
@@ -533,7 +538,7 @@ public:
         float           m_work_coord_sys[TOTAL_AXES_COUNT];
 
         float           m_g92_coord_offset[TOTAL_AXES_COUNT];
-        float           m_tool_offset[TOTAL_AXES_COUNT];
+        float           m_tool_offset[COORDINATE_LINEAR_AXES_COUNT];
         float           m_last_probe_position[TOTAL_AXES_COUNT];
         float           m_gcode_machine_pos[TOTAL_AXES_COUNT];
         
@@ -547,8 +552,8 @@ public:
         
         Planner*        m_planner;  
         
-        float           m_mm_per_arc_segment;
-        float           m_mm_max_arc_error;
+        float           m_mm_per_arc_segment;           
+        float           m_mm_max_arc_error;             
         uint8_t         m_arc_correction_counter;
         
         // State Information for Canned Cycles

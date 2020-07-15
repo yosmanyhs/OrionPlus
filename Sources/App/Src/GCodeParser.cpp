@@ -17,7 +17,7 @@ GCodeParser::GCodeParser(void)
     DwellCommandFn   = DEFAULT_DWELL_COMMAND_FUNCTION;
     HomingCommandFn  = DEFAULT_HOMING_COMMAND_FUNCTION;
     MotionCommandFn  = DEFAULT_MOTION_COMMAND_FUNCTION;
-    WaitCommandFn    = DEFAULT_WAIT_COMMAND_FUNCTION;
+    WaitForIdleCommandFn    = DEFAULT_WAIT_COMMAND_FUNCTION;
 }
 
 
@@ -62,8 +62,8 @@ void GCodeParser::ResetParser()
     m_check_mode = false;
     m_feed_hold = false;
     
-    m_mm_max_arc_error = 0.01f;
-    m_mm_per_arc_segment = 0.0f;
+    m_mm_max_arc_error = Settings_Manager::GetMaxArcError_mm();
+    m_mm_per_arc_segment = Settings_Manager::GetArcSegmentSize_mm();
     m_arc_correction_counter = 5;
     
     m_canned_cycle_active = false;
@@ -713,7 +713,7 @@ int GCodeParser::ParseLine(char * line)
     if ((modal_group_flags & MODAL_GROUP_M6_BIT) != 0)
     {
         // Wait for idle condition before attempt to stop spindle for tool change
-        work_var = this->WaitCommandFn();
+        work_var = this->WaitForIdleCommandFn();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -731,7 +731,7 @@ int GCodeParser::ParseLine(char * line)
         m_parser_modal_state.spindle_mode = m_block_data.block_modal_state.spindle_mode;
 
         // Wait for idle condition before attempt to change spindle operation
-        work_var = this->WaitCommandFn();
+        work_var = this->WaitForIdleCommandFn();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -749,7 +749,7 @@ int GCodeParser::ParseLine(char * line)
         m_parser_modal_state.coolant_mode = m_block_data.block_modal_state.coolant_mode;
 
         // Wait for idle condition before attempt to change coolant operation
-        work_var = this->WaitCommandFn();
+        work_var = this->WaitForIdleCommandFn();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -771,7 +771,7 @@ int GCodeParser::ParseLine(char * line)
         // queued commands
         
         // Wait for idle condition before attempt to enter dwell mode
-        work_var = this->WaitCommandFn();
+        work_var = this->WaitForIdleCommandFn();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -842,7 +842,7 @@ int GCodeParser::ParseLine(char * line)
     if ((modal_group_flags & MODAL_GROUP_G10_BIT) != 0)
     {
         // Wait for idle condition
-        work_var = this->WaitCommandFn();
+        work_var = this->WaitForIdleCommandFn();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -899,7 +899,7 @@ int GCodeParser::ParseLine(char * line)
         // queued commands
         
         // Wait for idle condition before attempt to change flow mode
-        work_var = this->WaitCommandFn();
+        work_var = this->WaitForIdleCommandFn();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -1252,7 +1252,7 @@ int GCodeParser::check_unused_codes()
         (m_block_data.block_modal_state.motion_mode != MODAL_MOTION_MODE_HELICAL_CW) && 
         (m_block_data.block_modal_state.motion_mode != MODAL_MOTION_MODE_HELICAL_CCW) )
     {
-        return GCODE_ERROR_UNUSED_VALUE_WORDS;
+        return GCODE_ERROR_UNUSED_OFFSET_VALUE_WORDS;
     }
 
     // Check the use of L word outside G10 or canned cycles
@@ -1260,7 +1260,7 @@ int GCodeParser::check_unused_codes()
         (m_block_data.non_modal_code != NON_MODAL_SET_COORDINATE_DATA) &&   // Not G10
         (m_axis_command_type != AXIS_COMMAND_TYPE_CANNED_CYCLE) )           // Not in [G81 .. G89]
     {
-        return GCODE_ERROR_UNUSED_VALUE_WORDS;
+        return GCODE_ERROR_UNUSED_L_VALUE_WORD;
     }
 
     // Check the use of P word outside G4, G10 or canned cycles [G82, G86, G88, G89]
@@ -1270,14 +1270,14 @@ int GCodeParser::check_unused_codes()
         
         (m_block_data.block_modal_state.motion_mode != MODAL_MOTION_MODE_CANNED_DRILL_DWELL_G82)) // Not [G82, G86, G88, G89]
     {
-        return GCODE_ERROR_UNUSED_VALUE_WORDS;
+        return GCODE_ERROR_UNUSED_P_VALUE_WORD;
     }
 
     // Check Q word used outside of G83 canned cycles
     if (((m_value_group_flags & VALUE_SET_Q_BIT) != 0) &&
         (m_block_data.block_modal_state.motion_mode != MODAL_MOTION_MODE_CANNED_DRILL_PECK_G83))
     {
-        return GCODE_ERROR_UNUSED_VALUE_WORDS;
+        return GCODE_ERROR_UNUSED_Q_VALUE_WORD;
     }
 
     // Check the use of R word outside of G2/G3 or canned cycles
@@ -1286,7 +1286,7 @@ int GCodeParser::check_unused_codes()
         (m_block_data.block_modal_state.motion_mode != MODAL_MOTION_MODE_HELICAL_CCW) &&
         (m_axis_command_type != AXIS_COMMAND_TYPE_CANNED_CYCLE) )
     {
-        return GCODE_ERROR_UNUSED_VALUE_WORDS;
+        return GCODE_ERROR_UNUSED_R_VALUE_WORD;
     }
 
     return GCODE_OK;
@@ -1367,7 +1367,7 @@ int GCodeParser::handle_non_modal_codes()
             uint32_t index;
             
             // Wait for idle condition before attempt to perform any homing command
-            work_var = this->WaitCommandFn();
+            work_var = this->WaitForIdleCommandFn();
             
             if (work_var != GCODE_OK)
                 return work_var;
@@ -1514,8 +1514,12 @@ int GCodeParser::handle_motion_commands()
                     else
                         target[index] = m_block_data.coordinate_data[index];
                     
-                    // TODO: m_tool_offset has too many values. Only 3 required. 
-                    target[index] += (m_work_coord_sys[index] - m_g92_coord_offset[index] + m_tool_offset[index]);
+                    // Apply offsets
+                    target[index] += (m_work_coord_sys[index] - m_g92_coord_offset[index]);
+                    
+                    // Only apply tool offsets for linear axes
+                    if (index < COORD_A)
+                        target[index] += m_tool_offset[index];
                 }
             }
         }
@@ -1572,7 +1576,7 @@ int GCodeParser::handle_motion_commands()
         case MODAL_MOTION_MODE_HELICAL_CCW:
 		{
             float offsets[3];
-            float radius;            
+            float radius;
             float delta_axis_0, delta_axis_1;
             
             // Calculate distance between current position and target position
@@ -1590,7 +1594,7 @@ int GCodeParser::handle_motion_commands()
                                 
                 // Check if endpoint equals to current point in Radius format arcs
                 if (memcmp((const void*)&target[0], (const void*)&m_gcode_machine_pos[0], sizeof(target)) == 0)
-                    return GCODE_ERROR_INVALID_TARGET_FOR_ARC;
+                    return GCODE_ERROR_INVALID_TARGET_FOR_R_ARC;
                 
                 // Radius format arc. R value provided. Need to calculate I, J, K offsets
                 radius = convert_to_mm(m_block_data.R_value);
@@ -1649,7 +1653,7 @@ int GCodeParser::handle_motion_commands()
                 if (delta_r_checking > 0.005f)
                 {
                     if (delta_r_checking > 0.5f)
-                        return GCODE_ERROR_INVALID_TARGET_FOR_ARC;
+                        return GCODE_ERROR_INVALID_TARGET_FOR_OFS_ARC;
                     
 //                    if (delta_r_checking > (0.001f * radius))
 //                        return GCODE_ERROR_INVALID_TARGET_FOR_ARC;
@@ -1818,10 +1822,13 @@ int GCodeParser::handle_motion_commands()
             
             if (work_var != GCODE_OK)
                 return work_var;
+            
+            // Update global machine position after performing move
+            memcpy(&m_gcode_machine_pos[0], &target[0], sizeof(m_gcode_machine_pos));
 		}
         break;
 
-        case MODAL_MOTION_MODE_PROBE:
+        case MODAL_MOTION_MODE_PROBE:   // TODO: Implement probing
 		{
 			// Check if current feedrate mode is units/min. Flag error otherwise
 			if (m_parser_modal_state.feedrate_mode != MODAL_FEEDRATE_MODE_UNITS_PER_MIN)
@@ -2135,14 +2142,29 @@ const char* GCodeParser::GetErrorText(uint32_t error_code)
     case GCODE_ERROR_MISSING_COORDS_IN_PLANE:
         return("Missing required coordinates in active plane");
         
-    case GCODE_ERROR_INVALID_TARGET_FOR_ARC:
-        return("Invalid target for arc");
+    case GCODE_ERROR_INVALID_TARGET_FOR_R_ARC:
+        return("Invalid target for radius format arc");
+    
+    case GCODE_ERROR_INVALID_TARGET_FOR_OFS_ARC:
+        return("Invalid target for center format arc");
         
     case GCODE_ERROR_INVALID_TARGET_FOR_PROBE:
         return("Invalid target for probe");
        
-    case GCODE_ERROR_UNUSED_VALUE_WORDS:
-        return("Found unused value words");
+    case GCODE_ERROR_UNUSED_OFFSET_VALUE_WORDS:
+        return("Found unused [I,J,K] offset value words");
+    
+    case GCODE_ERROR_UNUSED_L_VALUE_WORD:
+        return("Found unused L value word");
+    
+    case GCODE_ERROR_UNUSED_P_VALUE_WORD:
+        return("Found unused P value word");
+    
+    case GCODE_ERROR_UNUSED_Q_VALUE_WORD:
+        return("Found unused Q value word");
+    
+    case GCODE_ERROR_UNUSED_R_VALUE_WORD:
+        return("Found unused R value word");
        
     case GCODE_ERROR_USING_COORDS_NO_MOTION_MODE:
         return("Unexpected coordinates in no motion mode");

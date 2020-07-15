@@ -123,6 +123,8 @@ void Settings_Manager::ResetToDefaults()
     m_data->step_ctrl.S.step_idle_lock_secs = 30;
     
     m_data->junction_deviation_mm = 0.002f;
+    m_data->arc_segment_size_mm = 0.0f;
+    m_data->max_arc_error_mm =  0.01f;
     
     
     m_data->homing_data.home_seek_rate_mm_sec = 12.50f; // 750 mm/min -> 750/60 mm/sec = 12.5

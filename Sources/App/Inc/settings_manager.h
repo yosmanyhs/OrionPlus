@@ -95,6 +95,8 @@ typedef struct SETTINGS_DATA
     union STEPPER_CONTROL_DATA step_ctrl;
     
     float       junction_deviation_mm;  
+    float       arc_segment_size_mm;
+    float       max_arc_error_mm;
     
     struct HOMING_SETUP_DATA homing_data;
 
@@ -176,6 +178,12 @@ public:
     
     static inline float GetJunctionDeviation_mm() { return m_data->junction_deviation_mm; }
     static inline void  SetJunctionDeviation_mm(float jd_value) { m_data->junction_deviation_mm = jd_value; }
+    
+    static inline float GetArcSegmentSize_mm() { return m_data->arc_segment_size_mm; }
+    static inline void  SetArcSegmentSize_mm(float arsz_value) { m_data->arc_segment_size_mm = arsz_value; }
+
+    static inline float GetMaxArcError_mm() { return m_data->max_arc_error_mm; }
+    static inline void  SetMaxArcError_mm(float mae_value) { m_data->max_arc_error_mm = mae_value; }
     
     static inline float GetStepsPer_mm_Axis(uint32_t ax_idx) { return m_data->steps_per_mm_axes[ax_idx % 3]; }
     static inline void  SetStepsPer_mm_Axis(uint32_t ax_idx, float st_mm) { m_data->steps_per_mm_axes[ax_idx % 3] = st_mm; } 

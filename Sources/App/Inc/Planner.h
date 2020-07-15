@@ -85,8 +85,6 @@ public:
         float m_previous_unit_vector[TOTAL_AXES_COUNT];
         float m_junction_deviation;
     
-        float m_minimum_planner_speed; // Setting
-    
         int32_t m_position_steps[TOTAL_AXES_COUNT];
     
         Conveyor * m_conveyor;
