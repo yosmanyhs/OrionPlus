@@ -8,7 +8,6 @@
 
 #include "user_tasks.h"
 
-extern GLOBAL_TASK_INFO_STRUCT_TYPE global_task_info;
 
 /* FreeRTOS Hooks */
 extern "C" void vApplicationIdleHook( void )
@@ -21,11 +20,8 @@ extern "C" void vApplicationIdleHook( void )
         HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
     }
     
-    if (global_task_info.ready_to_use == true)
-    {
-        if (counter == 0)
-            global_task_info.conveyor_ptr->on_idle();
-    }
+    if (counter == 0)
+        machine->OnIdle();    
 }
 
 extern "C" void vApplicationTickHook( void )

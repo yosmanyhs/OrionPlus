@@ -19,6 +19,7 @@
 #include "pins.h"
 
 #include "user_tasks.h"
+#include "MachineCore.h"
 
 /*
  * The conveyor holds the queue of blocks, takes care of creating them, and starting the executing chain of blocks
@@ -47,7 +48,6 @@
  * Thus, our two ringbuffers exist sharing the one ring of blocks, and we safely marshall used blocks from ISR context to IDLE context for safe cleanup.
  */
  
- extern GLOBAL_TASK_INFO_STRUCT_TYPE global_task_info;
 
 Conveyor::Conveyor()
 {
@@ -63,12 +63,6 @@ void Conveyor::start()
     queue.resize(32);
     queue_delay_time_ms = (100);
     running = true;
-}
-
-void Conveyor::on_halt(void* argument)
-{
-    if (argument == NULL)
-        flush_queue();
 }
 
 void Conveyor::on_idle()
@@ -100,17 +94,10 @@ void Conveyor::on_idle()
 // checks that all motors are no longer moving
 bool Conveyor::is_idle() const
 {
-    if (queue.is_empty()) 
-    {
-        // for (auto &a : THEROBOT->actuators) 
-        // {
-            // if (a->is_moving()) 
-                // return false;
-        // }
-        return true;
-    }
-
-    return false;
+    if (queue.is_empty() == false || machine->AreMotorsStillMoving() == true)
+        return false;
+    
+    return true;
 }
 
 // Wait for the queue to be empty and for all the jobs to finish in step ticker
@@ -123,7 +110,6 @@ void Conveyor::wait_for_idle(bool wait_for_motors)
     while (!queue.is_empty()) 
     {
         check_queue(true); // forces queue to be made available to stepticker
-        //THEKERNEL->call_event(ON_IDLE, this);
     }
 
     if (wait_for_motors) 
@@ -145,27 +131,24 @@ void Conveyor::wait_for_idle(bool wait_for_motors)
 void Conveyor::queue_head_block()
 {
     // upstream caller will block on this until there is room in the queue
-    while (queue.is_full() /*&& !THEKERNEL->is_halted()*/) 
+    while (queue.is_full() && machine->IsHalted() == false) 
     {
-        //check_queue();
-        //THEKERNEL->call_event(ON_IDLE, this); // will call check_queue();
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 
-    // if (THEKERNEL->is_halted()) 
-    // {
-        // // we do not want to stick more stuff on the queue if we are in halt state
-        // // clear and release the block on the head
-        // queue.head_ref()->clear();
-        // return; // if we got a halt then we are done here
-    // }
+    if (machine->IsHalted())
+    {
+        // we do not want to stick more stuff on the queue if we are in halt state
+        // clear and release the block on the head
+        queue.head_ref()->clear();
+        return; // if we got a halt then we are done here
+    }
 
     queue.produce_head();
 
-    // not sure if this is the correct place but we need to turn on the motors if they were not already on
-    
+    // not sure if this is the correct place but we need to turn on the motors if they were not already on    
     // turn all enable pins on
-    global_task_info.step_ticker_ptr->EnableStepperDrivers(true);
+    machine->EnableSteppers();
 }
 
 void Conveyor::check_queue(bool force)
@@ -180,7 +163,7 @@ void Conveyor::check_queue(bool force)
         
         if (idle_timer_running == false)
         {
-            xTimerStart(global_task_info.stepper_idle_timer, 0);
+            machine->StartStepperIdleTimer();
             idle_timer_running = true;
         }
         
@@ -204,8 +187,7 @@ void Conveyor::check_queue(bool force)
             if (idle_timer_running == true)
             {
                 // Stop and reset idling timer
-                xTimerReset(global_task_info.stepper_idle_timer, 0);
-                xTimerStop(global_task_info.stepper_idle_timer, 0);
+                machine->StopStepperIdleTimer();
                 idle_timer_running = false;
             }
         }
@@ -229,7 +211,7 @@ bool Conveyor::get_next_block(Block **block)
     // default the feerate to zero if there is no block available
     this->current_feedrate = 0;
 
-    if (/*THEKERNEL->is_halted() || */ queue.isr_tail_i == queue.head_i) 
+    if (machine->IsHalted() == true || queue.isr_tail_i == queue.head_i) 
         return false; // we do not have anything to give
 
     // wait for queue to fill up, optimizes planning
@@ -279,6 +261,5 @@ void Conveyor::flush_queue()
 
     // now wait until the block queue has been flushed
     wait_for_idle(false);
-
     flush = false;
 }

@@ -10,9 +10,9 @@ void Init_Debug_UART1(void)
 {
     debug_uart_handle.Instance = USART1;
     debug_uart_handle.Init.BaudRate = 115200;
-    debug_uart_handle.Init.WordLength = UART_WORDLENGTH_9B;
+    debug_uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
     debug_uart_handle.Init.StopBits = UART_STOPBITS_1;
-    debug_uart_handle.Init.Parity = UART_PARITY_EVEN;
+    debug_uart_handle.Init.Parity = UART_PARITY_NONE;
     debug_uart_handle.Init.Mode = UART_MODE_TX_RX;
     debug_uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     debug_uart_handle.Init.OverSampling = UART_OVERSAMPLING_16;

@@ -383,14 +383,14 @@
           <GroupName>Configs</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4xx_hal_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Configs\stm32f4xx_hal_conf.h</FilePath>
-            </File>
-            <File>
               <FileName>pins.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Configs\pins.h</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Configs\stm32f4xx_hal_conf.h</FilePath>
             </File>
             <File>
               <FileName>FreeRTOSConfig.h</FileName>
@@ -398,14 +398,14 @@
               <FilePath>.\Sources\Configs\FreeRTOSConfig.h</FilePath>
             </File>
             <File>
-              <FileName>lv_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Graphics\lvgl\lv_conf.h</FilePath>
-            </File>
-            <File>
               <FileName>FreeRTOSFATConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Configs\FreeRTOSFATConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>lv_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Graphics\lvgl\lv_conf.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -431,6 +431,11 @@
               <FileName>user_tasks.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\user_tasks.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MachineCore.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\MachineCore.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -541,6 +546,16 @@
               <FileName>GCodeParser.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\GCodeParser.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CoolantController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\CoolantController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SpindleController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\SpindleController.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1634,14 +1649,14 @@
           <GroupName>Configs</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4xx_hal_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Configs\stm32f4xx_hal_conf.h</FilePath>
-            </File>
-            <File>
               <FileName>pins.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Configs\pins.h</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Configs\stm32f4xx_hal_conf.h</FilePath>
             </File>
             <File>
               <FileName>FreeRTOSConfig.h</FileName>
@@ -1649,14 +1664,14 @@
               <FilePath>.\Sources\Configs\FreeRTOSConfig.h</FilePath>
             </File>
             <File>
-              <FileName>lv_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Graphics\lvgl\lv_conf.h</FilePath>
-            </File>
-            <File>
               <FileName>FreeRTOSFATConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Configs\FreeRTOSFATConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>lv_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Graphics\lvgl\lv_conf.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1682,6 +1697,11 @@
               <FileName>user_tasks.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\user_tasks.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MachineCore.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\MachineCore.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1894,6 +1914,16 @@
               <FileName>GCodeParser.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\GCodeParser.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CoolantController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\CoolantController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SpindleController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\SpindleController.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2987,14 +3017,14 @@
           <GroupName>Configs</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4xx_hal_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Configs\stm32f4xx_hal_conf.h</FilePath>
-            </File>
-            <File>
               <FileName>pins.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Configs\pins.h</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Configs\stm32f4xx_hal_conf.h</FilePath>
             </File>
             <File>
               <FileName>FreeRTOSConfig.h</FileName>
@@ -3002,14 +3032,14 @@
               <FilePath>.\Sources\Configs\FreeRTOSConfig.h</FilePath>
             </File>
             <File>
-              <FileName>lv_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Graphics\lvgl\lv_conf.h</FilePath>
-            </File>
-            <File>
               <FileName>FreeRTOSFATConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Configs\FreeRTOSFATConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>lv_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Graphics\lvgl\lv_conf.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -3035,6 +3065,11 @@
               <FileName>user_tasks.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\user_tasks.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MachineCore.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\MachineCore.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -3247,6 +3282,16 @@
               <FileName>GCodeParser.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\GCodeParser.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CoolantController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\CoolantController.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SpindleController.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\SpindleController.cpp</FilePath>
             </File>
           </Files>
         </Group>

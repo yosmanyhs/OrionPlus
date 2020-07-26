@@ -7,6 +7,9 @@
 #include "hw_timers.h"
 #include "pins.h"
 
+#include "user_tasks.h"
+#include "MachineCore.h"
+
 
 StepTicker *StepTicker::instance;
 
@@ -203,13 +206,13 @@ void StepTicker::step_tick (void)
         }
     }
 
-//    if (THEKERNEL->is_halted()) 
-//    {
-//        running = false;
-//        current_tick = 0;
-//        current_block = NULL;
-//        return;
-//    }
+    if (machine->IsHalted())
+    {
+        running = false;
+        current_tick = 0;
+        current_block = NULL;
+        return;
+    }
 
     bool still_moving = false;
     

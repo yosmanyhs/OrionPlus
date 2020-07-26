@@ -35,13 +35,25 @@ static StreamBufferHandle_t     tx_buffer;
 //    "M30"
 //};
 
+static const char * hello_msg = "\r\nGrbl 1.1h ['$' for help]\r\n";
+
+static const char * fake_settings = \
+    "$0=10\r\n$1=25\r\n$2=0\r\n$3=0\r\n$4=0\r\n$5=0\r\n$6=0\r\n" \
+    "$10=1\r\n$11=0.010\r\n$12=0.002\r\n$13=0\r\n" \
+    "$20=0\r\n$21=0\r\n$22=1\r\n$23=0\r\n$24=25.0\r\n$25=500\r\n$26=250\r\n$27=1\r\n" \
+    "$30=1000\r\n$31=0\r\n$32=0\r\n" \
+    "$100=200\r\n$101=200\r\n$102=200\r\n" \
+    "$110=500\r\n$111=500\r\n$112=500\r\n" \
+    "$120=10\r\n$121=10\r\n$122=10\r\n" \
+    "$130=360\r\n$131=360\r\n$132=200\r\n";
+
+
 void SerialTask_Entry(void * pvParam)
 {
     char ch;
     char prev_ch;
     char * line_buffer;
     uint32_t ch_counter = 0;
-    int32_t gcode_result;
     bool allow_processing = false;   
     
     // Create Tx & Rx stream buffers
@@ -58,6 +70,11 @@ void SerialTask_Entry(void * pvParam)
     __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_RXNE);
     
     prev_ch = 0;    
+    
+    xStreamBufferSend(tx_buffer, (const void*)hello_msg, strlen(hello_msg), portMAX_DELAY);
+    __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
+    
+    vTaskDelay(5000);
     
     for ( ; ; )
     {
@@ -106,28 +123,52 @@ void SerialTask_Entry(void * pvParam)
         {
             int len;
             
-            xQueueSendToBack(((GLOBAL_TASK_INFO_TYPE)pvParam)->gcode_str_queue_handle, (const void*)&line_buffer, portMAX_DELAY);
+            if (strcmp(line_buffer, "$$") == 0)
+            {
+                int can_send;
+                int n_to_send;
+                const char * txptr = fake_settings;
+                
+                // send fake settings
+                len = strlen(fake_settings);
+                
+                while (len != 0)
+                {
+                    can_send = xStreamBufferSpacesAvailable(tx_buffer);
                     
-            // Retrieve response back
-            xQueueReceive(((GLOBAL_TASK_INFO_TYPE)pvParam)->gcode_result_queue_handle, (void*)&gcode_result, portMAX_DELAY);
-            
-            
-            const char* msg = GCodeParser::GetErrorText(gcode_result);
-            
-            // Send back response
-            len = strlen(line_buffer);
-            
-            if (len != 0)
-            {            
-                xStreamBufferSend(tx_buffer, (const void*)line_buffer, len, portMAX_DELAY);
-                xStreamBufferSend(tx_buffer, (const void*)(" >> "), 4, portMAX_DELAY);
+                    n_to_send = std::min(can_send, len);
+                    
+                    if (n_to_send != 0)
+                    {
+                        xStreamBufferSend(tx_buffer, (const void*)txptr, n_to_send, portMAX_DELAY);
+                    }
+                    
+                    __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
+                    
+                    len -= n_to_send;
+                    txptr += n_to_send;
+                    vTaskDelay(50);
+                }
+                
+                allow_processing = false;
+                continue;
             }
             
-            xStreamBufferSend(tx_buffer, (const void*)msg, strlen(msg), portMAX_DELAY);
-            xStreamBufferSend(tx_buffer, (const void*)("\n"), 1, portMAX_DELAY);
-            __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
-    
-            memset(line_buffer, 0, RX_BUFFER_SIZE+1);
+//            const char* msg = GCodeParser::GetErrorText(machine->GCParser()->ParseLine(line_buffer));
+//            
+//            // Send back response
+//            len = strlen(line_buffer);
+//            
+//            if (len != 0)
+//            {            
+//                xStreamBufferSend(tx_buffer, (const void*)line_buffer, len, portMAX_DELAY);
+//                xStreamBufferSend(tx_buffer, (const void*)(" >> "), 4, portMAX_DELAY);
+//            }
+//            
+//            xStreamBufferSend(tx_buffer, (const void*)msg, strlen(msg), portMAX_DELAY);
+//            xStreamBufferSend(tx_buffer, (const void*)("\r\n"), 2, portMAX_DELAY);
+//            __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
+
             allow_processing = false;
             
         }

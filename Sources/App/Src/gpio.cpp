@@ -7,8 +7,7 @@
 #include "event_groups.h"
 
 #include "user_tasks.h"
-
-extern GLOBAL_TASK_INFO_STRUCT_TYPE global_task_info;
+#include "MachineCore.h"
 
 void Init_GPIO_Pins(void)
 {
@@ -168,41 +167,14 @@ void Init_GPIO_Pins(void)
     HAL_NVIC_EnableIRQ(EXTI9_5_IRQn); 
 }
 
+// Notify MachineCore of the occurrence of any of these events
+// Limits [X, Y, Z] | Global Fault [Steppers]
 extern "C" void EXTI9_5_IRQHandler(void)
 {
     uint32_t pr_value = EXTI->PR;
     BaseType_t high_prio_woken = pdFALSE;
     
-    // Check each bit [EXTI6, EXTI7, EXTI8]
-    // EXTI6
-    if ((pr_value & (1 << 6)) != 0)
-    {
-        // EXTI6 can be from PC6 [Limit X] / PG6 [Global Stepper Fault]
-        if (HAL_GPIO_ReadPin(GLOBAL_FAULT_GPIO_Port, GLOBAL_FAULT_Pin) != GPIO_PIN_SET)
-        {
-            // Global Fault = 0. Stepper motors fault condition
-            xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  STEPPER_FAULT_EVENT, &high_prio_woken);
-        }
-        else if (HAL_GPIO_ReadPin(LIM_X_GPIO_Port, LIM_X_Pin) != GPIO_PIN_RESET)
-        {
-            // Limit X = 1
-            xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_X_MIN_EVENT, &high_prio_woken);
-        }
-    }
-    
-    // EXTI7
-    if ((pr_value & (1 << 7)) != 0)
-    {
-        // Limit Y
-        xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_Y_MIN_EVENT, &high_prio_woken);
-    }
-    
-    // EXTI8
-    if ((pr_value & (1 << 8)) != 0)
-    {
-        // Limit Z
-        xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_Z_MIN_EVENT, &high_prio_woken);
-    }
+    high_prio_woken = machine->NotifyOfEvent(pr_value);
     
     // Clear all pending bits
     EXTI->PR = pr_value;

@@ -1,16 +1,20 @@
 #include "GCodeParser.h"
 
+
 #include <ctype.h>
 #include <string.h>
 #include <math.h>
 
 #include "settings_manager.h"
 
+#include "user_tasks.h"
+#include "MachineCore.h"
+
 GCodeParser::GCodeParser(void)
 {
     ResetParser();
     
-    m_planner = NULL;
+    m_planner_ref = NULL;
 
     SpindleCommandFn = DEFAULT_SPINDLE_COMMAND_FUNCTION;
     CoolantCommandFn = DEFAULT_COOLANT_COMMAND_FUNCTION;
@@ -60,7 +64,6 @@ void GCodeParser::ResetParser()
     }
     
     m_check_mode = false;
-    m_feed_hold = false;
     
     m_mm_max_arc_error = Settings_Manager::GetMaxArcError_mm();
     m_mm_per_arc_segment = Settings_Manager::GetArcSegmentSize_mm();
@@ -126,13 +129,38 @@ int GCodeParser::ParseLine(char * line)
 			break;
 
             case 'd':
-            case 'h':
             {
-                // Skip d, h
+                // Check for multiple definitions of D word
+                if ((m_value_group_flags & VALUE_SET_D_BIT) != 0)
+                    return GCODE_ERROR_MULTIPLE_DEF_D_WORD; // Multiple definitions of D word value in the same line
+                
+                // Read integer value
                 work_var = DataConverter::StringToInteger(&m_line, &success_bits);
 
-                if (success_bits == 0)
-                    return GCODE_ERROR_INVALID_G_CODE; // TODO: Fix this
+                if (success_bits == 0 || work_var < 0)
+                    return GCODE_ERROR_INVALID_D_VALUE; // 
+                
+                // Finally update D value and bitmap
+                m_block_data.D_value = work_var;
+                m_value_group_flags |= VALUE_SET_D_BIT;
+            }
+            break;
+            
+            case 'h':
+            {
+                // Check for multiple definitions of H word
+                if ((m_value_group_flags & VALUE_SET_H_BIT) != 0)
+                    return GCODE_ERROR_MULTIPLE_DEF_H_WORD; // Multiple definitions of D word value in the same line
+                
+                // Read integer value
+                work_var = DataConverter::StringToInteger(&m_line, &success_bits);
+
+                if (success_bits == 0 || work_var < 0)
+                    return GCODE_ERROR_INVALID_H_VALUE; 
+                
+                // Finally update H value and bitmap
+                m_block_data.H_value = work_var;
+                m_value_group_flags |= VALUE_SET_H_BIT;
             }
             break;
 
@@ -908,8 +936,8 @@ int GCodeParser::ParseLine(char * line)
         {
             if (m_check_mode != false)
             {
-                // TODO: Notify to other sub-systems of feed hold condition
-                this->m_feed_hold = true;
+                // Notify to other sub-systems of feed hold condition
+                machine->EnterFeedHold();
             }                
         }
         else if ( (m_parser_modal_state.prog_flow == MODAL_FLOW_COMPLETED) ||       // M2
@@ -1782,7 +1810,9 @@ int GCodeParser::handle_motion_commands()
                 for (index = 1; index < segments; index++) 
                 {
                     // Increment (segments-1)
-                    // TODO: Check for abort conditions
+                    // Check for abort conditions
+                    if (machine->IsHalted() == true)
+                        break;
                     
                     if (count < m_arc_correction_counter) 
                     {
@@ -1926,10 +1956,9 @@ int GCodeParser::motion_append_line(const float * target_pos)
     {
         for (index = COORD_X; index < COORDINATE_LINEAR_AXES_COUNT; index++)
         {
-            // TODO: Add support to detect if currently the machine is homing
-            // TODO: Add information to each axis regarding the homed status
-            //if(!is_homed(i))
-            //    continue;     // skip if we're homing (any axis)/not homed yet (this axis)
+            // Skip if we're homing (any axis)/not homed yet (this axis)
+            if (machine->IsHomingNow() == true || machine->IsAxisHomed(index) == false)
+                continue;
 
             if (index < COORD_A)
             {
@@ -1938,7 +1967,8 @@ int GCodeParser::motion_append_line(const float * target_pos)
                     if ((target_pos[index] < 0.0f) ||
                         (target_pos[index] > this->m_soft_limit_max_values[index]))
                     {
-                        // TODO: Report violation of limit values. Stop the execution of commands.
+                        // Report violation of limit values. Stop the execution of commands.
+                        machine->Halt();
                         return GCODE_ERROR_TARGET_OUTSIDE_LIMIT_VALUES;
                     }
                 }
@@ -1951,17 +1981,17 @@ int GCodeParser::motion_append_line(const float * target_pos)
         return GCODE_OK;
     
     // Check if currently in feed hold condition
-    while (this->m_feed_hold == true)
+    while (machine->IsFeedHoldActive() == true)
     {
         // Wait here.
         // TODO: Check what else to do during this time. The idea is to use this class
         //       from inside a task, so the task can be put in a wait state until feed hold
         //       condition disappears. 
-        ;
+        vTaskDelay(pdMS_TO_TICKS(100)); // Yield control to other tasks while the queue is being flushed
     }
 
     // Finally call the planner to append a new block.
-    if (m_planner != NULL)
+    if (m_planner_ref != NULL)
     {
         float move_rate = (m_parser_modal_state.motion_mode == MODAL_MOTION_MODE_SEEK) ? SOME_LARGE_VALUE : (m_block_data.feed_rate / 60.0f);
         bool inverse_time_rate = (m_parser_modal_state.feedrate_mode == MODAL_FEEDRATE_MODE_INVERSE_TIME) ? true : false;
@@ -1970,7 +2000,7 @@ int GCodeParser::motion_append_line(const float * target_pos)
         if (m_parser_modal_state.motion_mode == MODAL_MOTION_MODE_SEEK)
             inverse_time_rate = false;
         
-        return m_planner->AppendLine(target_pos, m_spindle_speed, move_rate, inverse_time_rate);
+        return m_planner_ref->AppendLine(target_pos, m_spindle_speed, move_rate, inverse_time_rate);
     }
     
     return GCODE_ERROR_MISSING_PLANNER;    
@@ -2187,6 +2217,18 @@ const char* GCodeParser::GetErrorText(uint32_t error_code)
     case GCODE_ERROR_INVALID_Q_VALUE:
         return("Invalid Q word value");
     
+    case GCODE_ERROR_MULTIPLE_DEF_D_WORD:
+        return("Multiple definitions of D word");
+    
+    case GCODE_ERROR_INVALID_D_VALUE:
+        return("Invalid D word value");
+    
+    case GCODE_ERROR_MULTIPLE_DEF_H_WORD:
+        return("Multiple definitions of H word");
+        
+    case GCODE_ERROR_INVALID_H_VALUE:
+        return("Invalid H word value");
+    
     case GCODE_ERROR_MISSING_ARC_DATA_HELICAL_MOTION:
         return("Missing arc data [Radius value/IJK Offsets] in helical [G2/G3] motion");
 
@@ -2201,10 +2243,13 @@ const char* GCodeParser::GetErrorText(uint32_t error_code)
 
 	case GCODE_ERROR_PROBE_CANNOT_MOVE_ROTATY_AXES:
 		return("Cannot perform probe cycle with rotary axes movement");
-
+    
 	case GCODE_ERROR_ABSOLUTE_OVERRIDE_CANNOT_USE_RAD_COMP:
 		return("G53 cannot be used while cutter radius compensation is active");
 
+    case GCODE_ERROR_CANNOT_CHANGE_WCS_WITH_RAD_COMP:
+        return("Cannot change WCS while tool radius compensation is active");
+    
 	case GCODE_ERROR_MISSING_FEEDRATE_INVERSE_TIME_MODE:
 		return("Missing feed rate value with inverse time feed rate mode moves");
         

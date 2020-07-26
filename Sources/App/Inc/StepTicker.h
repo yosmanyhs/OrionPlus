@@ -34,6 +34,9 @@ public:
     void Associate_Conveyor(Conveyor* conv) { m_conveyor = conv; }
     inline void EnableMotor(uint8_t axis) { this->motor_enable_bits |= (1 << axis); }
     inline void DisableMotor(uint8_t axis) { this->motor_enable_bits &= (~(1 << axis)); }
+    inline void DisableAllMotors() { this->motor_enable_bits = 0; }
+    
+    inline bool AreMotorsStillMoving() { return (this->motor_enable_bits != 0) ? true : false; }
     
     void ApplyUpdatedInversionMasks();
     void ResetStepperDrivers(bool reset);

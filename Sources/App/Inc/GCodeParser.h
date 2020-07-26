@@ -110,6 +110,12 @@ enum GCODE_STATUS_RESULTS
 
     GCODE_ERROR_MULTIPLE_DEF_Q_WORD,
     GCODE_ERROR_INVALID_Q_VALUE,
+    
+    GCODE_ERROR_MULTIPLE_DEF_D_WORD,
+    GCODE_ERROR_INVALID_D_VALUE,
+    
+    GCODE_ERROR_MULTIPLE_DEF_H_WORD,
+    GCODE_ERROR_INVALID_H_VALUE,
 
     GCODE_ERROR_MISSING_ARC_DATA_HELICAL_MOTION,  // 
     GCODE_ERROR_CONFLICT_ARC_DATA_HELICAL_MOTION,
@@ -426,6 +432,9 @@ typedef struct GCodeBlockData
 
     float block_coordinate_origin[TOTAL_AXES_COUNT];
     
+    int32_t D_value;
+    int32_t H_value;
+    
 }GCodeBlockData;
 
 
@@ -497,16 +506,13 @@ public:
         GCodeParser();
         ~GCodeParser();
 
-        void AssociatePlanner(Planner* planner) { m_planner = planner; }
+        void AssociatePlanner(Planner* planner) { m_planner_ref = planner; }
     
         void ResetParser();
         int ParseLine(char* line);
 
         void EnableCheckMode() { m_check_mode = true; }
         void DisableCheckMode() { m_check_mode = false; } 
-        
-        void EnterFeedHoldMode() { m_feed_hold = true; }
-        void ExitFeedHoldMode() { m_feed_hold = false; }
 
         // Callbacks
         SpindleCommandFnPtr     SpindleCommandFn;
@@ -548,9 +554,8 @@ public:
         GCodeBlockData  m_block_data;
         
         bool            m_check_mode;
-        bool            m_feed_hold;
         
-        Planner*        m_planner;  
+        Planner*        m_planner_ref;  
         
         float           m_mm_per_arc_segment;           
         float           m_mm_max_arc_error;             
