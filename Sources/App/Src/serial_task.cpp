@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <algorithm>
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "stream_buffer.h"
@@ -69,12 +71,7 @@ void SerialTask_Entry(void * pvParam)
     /* USART1 interrupt Init */
     __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_RXNE);
     
-    prev_ch = 0;    
-    
-    xStreamBufferSend(tx_buffer, (const void*)hello_msg, strlen(hello_msg), portMAX_DELAY);
-    __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
-    
-    vTaskDelay(5000);
+    prev_ch = 0;
     
     for ( ; ; )
     {
@@ -121,56 +118,23 @@ void SerialTask_Entry(void * pvParam)
 
         if (allow_processing == true)
         {
-            int len;
+            const char* msg = machine->GetGCodeErrorText(machine->ParseGCodeLine(line_buffer));
+            size_t len;
             
-            if (strcmp(line_buffer, "$$") == 0)
-            {
-                int can_send;
-                int n_to_send;
-                const char * txptr = fake_settings;
-                
-                // send fake settings
-                len = strlen(fake_settings);
-                
-                while (len != 0)
-                {
-                    can_send = xStreamBufferSpacesAvailable(tx_buffer);
-                    
-                    n_to_send = std::min(can_send, len);
-                    
-                    if (n_to_send != 0)
-                    {
-                        xStreamBufferSend(tx_buffer, (const void*)txptr, n_to_send, portMAX_DELAY);
-                    }
-                    
-                    __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
-                    
-                    len -= n_to_send;
-                    txptr += n_to_send;
-                    vTaskDelay(50);
-                }
-                
-                allow_processing = false;
-                continue;
+            // Send back response
+            len = strlen(line_buffer);
+            
+            if (len != 0)
+            {            
+                xStreamBufferSend(tx_buffer, (const void*)line_buffer, len, portMAX_DELAY);
+                xStreamBufferSend(tx_buffer, (const void*)(" >> "), 4, portMAX_DELAY);
             }
             
-//            const char* msg = GCodeParser::GetErrorText(machine->GCParser()->ParseLine(line_buffer));
-//            
-//            // Send back response
-//            len = strlen(line_buffer);
-//            
-//            if (len != 0)
-//            {            
-//                xStreamBufferSend(tx_buffer, (const void*)line_buffer, len, portMAX_DELAY);
-//                xStreamBufferSend(tx_buffer, (const void*)(" >> "), 4, portMAX_DELAY);
-//            }
-//            
-//            xStreamBufferSend(tx_buffer, (const void*)msg, strlen(msg), portMAX_DELAY);
-//            xStreamBufferSend(tx_buffer, (const void*)("\r\n"), 2, portMAX_DELAY);
-//            __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
+            xStreamBufferSend(tx_buffer, (const void*)msg, strlen(msg), portMAX_DELAY);
+            xStreamBufferSend(tx_buffer, (const void*)("\r\n"), 2, portMAX_DELAY);
+            __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
 
-            allow_processing = false;
-            
+            allow_processing = false;            
         }
     }
 }

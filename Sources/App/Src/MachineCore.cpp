@@ -21,10 +21,14 @@ MachineCore::MachineCore(void)
     m_system_halted = false;
     m_feed_hold = false;
     
+    m_gcode_source = GCODE_SOURCE_SERIAL_CONSOLE;
+    
+    m_homing_state = HOMING_IDLE;
     m_axes_homing_now = 0;
     m_axes_already_homed = 0;
     
-    m_gcode_source = GCODE_SOURCE_SERIAL_CONSOLE;
+    m_probe_state = PROBING_IDLE;
+    memset((void*)this->m_probe_position, 0, sizeof(this->m_probe_position));
     
     // Create objects
     m_gcode_parser = new GCodeParser();

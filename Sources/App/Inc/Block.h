@@ -8,7 +8,6 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include <bitset>
 #include <stdint.h>
 
 #include "StepTicker.h"

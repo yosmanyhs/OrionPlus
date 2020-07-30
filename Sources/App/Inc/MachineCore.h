@@ -26,8 +26,19 @@ typedef enum GCODE_SOURCE_OPTIONS
 
 ///////////////////////////////////////////////////////////////////////////////
 
+typedef enum HOMING_STATE_VALUES
+{
+    HOMING_IDLE,
+    
+}HOMING_STATE_VALUES;
+
 ///////////////////////////////////////////////////////////////////////////////
 
+typedef enum PROBING_STATE_VALUES
+{
+    PROBING_IDLE,
+    
+}PROBING_STATE_VALUES;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -89,6 +100,9 @@ public:
     inline bool IsAxisHomed(uint8_t axis) { return (((1 << axis) & m_axes_already_homed) != 0) ? true : false; }
     
     inline bool AreMotorsStillMoving() { return m_step_ticker->AreMotorsStillMoving(); }
+    
+    int ParseGCodeLine(char* line) { return m_gcode_parser->ParseLine(line); }
+    const char* GetGCodeErrorText(uint32_t code) { return GCodeParser::GetErrorText(code); } 
         
 protected:
     
@@ -103,10 +117,16 @@ protected:
     class CoolantController*    m_coolant;
     class SpindleController*    m_spindle;
 
+    GCODE_SOURCE_OPTIONS        m_gcode_source;
+
+    // Homing Control
+    HOMING_STATE_VALUES         m_homing_state;
     uint32_t                    m_axes_homing_now;
     uint32_t                    m_axes_already_homed;
 
-    GCODE_SOURCE_OPTIONS        m_gcode_source;
+    // Probing Control
+    PROBING_STATE_VALUES        m_probe_state;
+    float                       m_probe_position[COORDINATE_LINEAR_AXES_COUNT];
 
     // FreeRTOS objects
     TimerHandle_t               m_stepper_idle_timer;

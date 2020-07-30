@@ -4,6 +4,8 @@
 #include <string.h>
 #include <math.h>
 
+#include <algorithm>
+
 #include "settings_manager.h"
 #include "Conveyor.h"
 

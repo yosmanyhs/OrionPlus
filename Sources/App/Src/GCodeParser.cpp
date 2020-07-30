@@ -69,6 +69,9 @@ void GCodeParser::ResetParser()
     m_mm_per_arc_segment = Settings_Manager::GetArcSegmentSize_mm();
     m_arc_correction_counter = 5;
     
+    // Load G92 offsets from the settings
+    Settings_Manager::ReadCoordinateValues(92, &m_g92_coord_offset[0]);
+    
     m_canned_cycle_active = false;
         
     m_cc_initial_z = 0.0f;
@@ -1229,7 +1232,7 @@ int GCodeParser::check_group_0_codes()
             case NON_MODAL_SET_COORDINATE_OFFSET_SAVE:   // G92
             case NON_MODAL_RESET_COORDINATE_OFFSET_SAVE: // G92.1
             case NON_MODAL_RESET_COORDINATE_OFFSET_NO_SAVE: // G92.2
-            case NON_MODAL_APPLY_SAVED_COORDINATE_OFFSETS:  // G02.3
+            case NON_MODAL_APPLY_SAVED_COORDINATE_OFFSETS:  // G92.3
                 break;
 
             case NON_MODAL_ABSOLUTE_OVERRIDE:       // G53
@@ -1492,20 +1495,23 @@ int GCodeParser::handle_non_modal_codes()
                 case 1:     // G92.1 [Reset coordinate offsets and save to parameters]
                 case 2:     // G92.2 [Reset coordinate offsets but not save]
                 {
-                    memset((void*)&m_g92_coord_offset[0], 0, sizeof(m_g92_coord_offset));
+                    memset((void*)&values[0], 0, sizeof(values));
 
                     // Only save if G92.1
                     if (action == 1)
-                        Settings_Manager::WriteCoordinateValues(92, &m_g92_coord_offset[0]);
+                        Settings_Manager::WriteCoordinateValues(92, &values[0]);
                 }
                 break;
 
                 default:    // G92.3 [Recall coordinate offsets from parameters]
                 {
-                    Settings_Manager::ReadCoordinateValues(92, &m_g92_coord_offset[0]);
+                    Settings_Manager::ReadCoordinateValues(92, &values[0]);
                 }
                 break;
             }
+            
+            // In any case update active coordinate offsets
+            memcpy((void*)&m_g92_coord_offset[0], (const void*)&values[0], sizeof(m_g92_coord_offset));
         }
         break;
     }
