@@ -20,6 +20,7 @@ MachineCore::MachineCore(void)
     m_startup_finished = false;
     m_system_halted = false;
     m_feed_hold = false;
+    m_dwell_active = false;
     
     m_gcode_source = GCODE_SOURCE_SERIAL_CONSOLE;
     
@@ -99,9 +100,16 @@ void MachineCore::OnIdle()
     m_conveyor->on_idle();
 }
 
-void MachineCore::StartStepperIdleTimer()
+bool MachineCore::StartStepperIdleTimer()
 {
-    xTimerStart(m_stepper_idle_timer, 0);
+    // Only start idling timer if not dwelling
+    if (m_dwell_active == false)
+    {
+        xTimerStart(m_stepper_idle_timer, 0);
+        return true;
+    }
+    
+    return false;
 }
 
 void MachineCore::StopStepperIdleTimer()
@@ -158,6 +166,70 @@ BaseType_t MachineCore::NotifyOfEvent(uint32_t it_evt_src)
     }
     
     return pdFALSE;
+}
+
+int MachineCore::GoHome(float* target, bool isG28) 
+{ 
+    return 0; 
+}
+
+int MachineCore::DoProbe()
+{
+    return 0;
+}
+    
+int MachineCore::SendSpindleCommand(GCODE_MODAL_SPINDLE_MODES mode, float spindle_rpm) 
+{ 
+    return 0; 
+}
+
+int MachineCore::SendCoolantCommand(GCODE_MODAL_COOLANT_MODES mode) 
+{ 
+    switch (mode)
+    {
+        case MODAL_COOLANT_FLOOD:
+            m_coolant->EnableFlood();
+            break;
+        
+        case MODAL_COOLANT_MIST:
+            m_coolant->EnableMist();
+            break;
+        
+        default:
+            m_coolant->Stop();
+            break;
+    }
+
+    return 0;
+}
+    
+int MachineCore::Dwell(float p_time_secs) 
+{ 
+    int ms = (int)(p_time_secs * 1000);
+    
+    // Notify the system is dwelling
+    m_dwell_active = true;
+    
+    while (ms >= 0)
+    {
+        if (this->m_system_halted != false)
+        {
+            m_dwell_active = false;
+            return -1;  // TODO: Modify to proper value indicating Halt condition
+        }
+        
+        vTaskDelay(pdMS_TO_TICKS(500));
+        ms -= 500;
+    }
+    
+    m_dwell_active = false;
+    return 0; 
+}
+    
+int MachineCore::WaitForIdleCondition() 
+{ 
+    m_conveyor->wait_for_idle(); 
+    return 0; 
 }
 
 // Static timer callback functions

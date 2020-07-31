@@ -2618,88 +2618,7 @@
           <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000 -FP0($$Device:STM32F407ZGTx$CMSIS\Flash\STM32F4xx_1024.FLM))</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>829</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>536907632</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\Sources\App\Src\GCodeParser.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OrionPlus_D\Sources/App/Src/GCodeParser.cpp\829</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>366</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>536906164</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\Sources\App\Src\GCodeParser.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OrionPlus_D\Sources/App/Src/GCodeParser.cpp\366</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>393</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>536906276</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\Sources\App\Src\GCodeParser.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OrionPlus_D\Sources/App/Src/GCodeParser.cpp\393</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>39</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>536917724</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\Sources\App\Src\main.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OrionPlus_D\Sources/App/Src/main.cpp\39</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>114</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>536893830</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\Sources\App\Src\serial_task.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OrionPlus_D\Sources/App/Src/serial_task.cpp\114</Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -3172,7 +3091,7 @@
       <GroupNumber>5</GroupNumber>
       <FileNumber>30</FileNumber>
       <FileType>8</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Sources\App\Src\CoolantController.cpp</PathWithFileName>

@@ -16,7 +16,15 @@ CoolantController::~CoolantController()
 }
 
 
-bool CoolantController::Stop()
+void CoolantController::Stop()
 {
-    return true;
 }
+
+void CoolantController::EnableMist()
+{
+}
+
+void CoolantController::EnableFlood()
+{
+}
+

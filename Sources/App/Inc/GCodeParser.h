@@ -437,63 +437,6 @@ typedef struct GCodeBlockData
     
 }GCodeBlockData;
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Function pointers for callback functions (must be set to proper values pointing to user functions)
-// Included default dummy pointers
-
-/// Spindle Commands ///
-typedef int32_t (*SpindleCommandFnPtr)(GCODE_MODAL_SPINDLE_MODES mode, float spindle_rpm);
-
-//// Dummy spindle command function ////
-static int32_t DummySpindleCmdFn(GCODE_MODAL_SPINDLE_MODES m, float s) { return 0; }
-#define DEFAULT_SPINDLE_COMMAND_FUNCTION    DummySpindleCmdFn
-
-
-
-/// Coolant Commands ///
-typedef int32_t (*CoolantCommandFnPtr)(GCODE_MODAL_COOLANT_MODES mode);
-
-//// Dummy cooland command function ////
-static int32_t DummyCoolantCmdFn(GCODE_MODAL_COOLANT_MODES m) { return 0; }
-#define DEFAULT_COOLANT_COMMAND_FUNCTION    DummyCoolantCmdFn
-
-
-
-/// Dwell Commands ///
-typedef int32_t (*DwellCommandFnPtr)(float d_value);
-
-//// Dummy Dwell command function ////
-static int32_t DummyDwellCmdFn(float d_value) { return 0; }
-#define DEFAULT_DWELL_COMMAND_FUNCTION      DummyDwellCmdFn
-
-
-
-/// Homing Commands ///
-typedef int32_t (*HomingCommandFnPtr)(const float * midpos, bool isG28);
-
-//// Dummy Homing command function ////
-static int32_t DummyHomingCmdFn(const float* midpos, bool isG28) { return 0; }
-#define DEFAULT_HOMING_COMMAND_FUNCTION     DummyHomingCmdFn
-
-
-
-/// Motion Commands ///
-typedef int32_t (*MotionCommandFnPtr)(const GCodeBlockData & block);
-
-//// Dummy Motion Command function ////
-static int32_t DummyMotionCmdFn(const GCodeBlockData & block) {  return 0; }
-#define DEFAULT_MOTION_COMMAND_FUNCTION     DummyMotionCmdFn
-
-
-
-/// Waiting Commands ///
-typedef int32_t (*WaitingCommandFnPtr)(void);
-
-//// Dummy Waiting Function ////
-static int32_t DummyWaitCmdFn(void) { return 0; }
-#define DEFAULT_WAIT_COMMAND_FUNCTION       DummyWaitCmdFn
-
 ///////////////////////////////////////////////////////////////////////////////
 #include "Planner.h"
 ///////////////////////////////////////////////////////////////////////////////
@@ -513,14 +456,6 @@ public:
 
         void EnableCheckMode() { m_check_mode = true; }
         void DisableCheckMode() { m_check_mode = false; } 
-
-        // Callbacks
-        SpindleCommandFnPtr     SpindleCommandFn;
-        CoolantCommandFnPtr     CoolantCommandFn;
-        DwellCommandFnPtr       DwellCommandFn;
-        HomingCommandFnPtr      HomingCommandFn;
-        MotionCommandFnPtr      MotionCommandFn;
-        WaitingCommandFnPtr     WaitForIdleCommandFn;
 
         static const char*  GetErrorText(uint32_t error_code);
 

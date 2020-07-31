@@ -110,6 +110,7 @@ void Conveyor::wait_for_idle(bool wait_for_motors)
     while (!queue.is_empty()) 
     {
         check_queue(true); // forces queue to be made available to stepticker
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 
     if (wait_for_motors) 
@@ -117,7 +118,7 @@ void Conveyor::wait_for_idle(bool wait_for_motors)
         // now we wait for all motors to stop moving
         while(!is_idle()) 
         {
-            //THEKERNEL->call_event(ON_IDLE, this);
+            vTaskDelay(pdMS_TO_TICKS(100));
         }
     }
 
@@ -163,8 +164,8 @@ void Conveyor::check_queue(bool force)
         
         if (idle_timer_running == false)
         {
-            machine->StartStepperIdleTimer();
-            idle_timer_running = true;
+            if (machine->StartStepperIdleTimer() != false)
+                idle_timer_running = true;
         }
         
         return;

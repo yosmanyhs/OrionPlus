@@ -15,13 +15,6 @@ GCodeParser::GCodeParser(void)
     ResetParser();
     
     m_planner_ref = NULL;
-
-    SpindleCommandFn = DEFAULT_SPINDLE_COMMAND_FUNCTION;
-    CoolantCommandFn = DEFAULT_COOLANT_COMMAND_FUNCTION;
-    DwellCommandFn   = DEFAULT_DWELL_COMMAND_FUNCTION;
-    HomingCommandFn  = DEFAULT_HOMING_COMMAND_FUNCTION;
-    MotionCommandFn  = DEFAULT_MOTION_COMMAND_FUNCTION;
-    WaitForIdleCommandFn    = DEFAULT_WAIT_COMMAND_FUNCTION;
 }
 
 
@@ -744,13 +737,13 @@ int GCodeParser::ParseLine(char * line)
     if ((modal_group_flags & MODAL_GROUP_M6_BIT) != 0)
     {
         // Wait for idle condition before attempt to stop spindle for tool change
-        work_var = this->WaitForIdleCommandFn();
+        work_var = machine->WaitForIdleCondition();
         
         if (work_var != GCODE_OK)
             return work_var;
         
         // Stop Spindle and leave coolant as currently is 
-        work_var = this->SpindleCommandFn(MODAL_SPINDLE_OFF, 0.0f);
+        work_var = machine->SendSpindleCommand(MODAL_SPINDLE_OFF, 0.0f);
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -762,13 +755,13 @@ int GCodeParser::ParseLine(char * line)
         m_parser_modal_state.spindle_mode = m_block_data.block_modal_state.spindle_mode;
 
         // Wait for idle condition before attempt to change spindle operation
-        work_var = this->WaitForIdleCommandFn();
+        work_var = machine->WaitForIdleCondition();
         
         if (work_var != GCODE_OK)
             return work_var;
         
         // Notify of spindle changes
-        work_var = this->SpindleCommandFn(m_parser_modal_state.spindle_mode, m_spindle_speed);
+        work_var = machine->SendSpindleCommand(m_parser_modal_state.spindle_mode, m_spindle_speed);
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -780,13 +773,13 @@ int GCodeParser::ParseLine(char * line)
         m_parser_modal_state.coolant_mode = m_block_data.block_modal_state.coolant_mode;
 
         // Wait for idle condition before attempt to change coolant operation
-        work_var = this->WaitForIdleCommandFn();
+        work_var = machine->WaitForIdleCondition();
         
         if (work_var != GCODE_OK)
             return work_var;
         
         // Notify of coolant changes
-        work_var = this->CoolantCommandFn(m_parser_modal_state.coolant_mode);
+        work_var = machine->SendCoolantCommand(m_parser_modal_state.coolant_mode);
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -802,12 +795,12 @@ int GCodeParser::ParseLine(char * line)
         // queued commands
         
         // Wait for idle condition before attempt to enter dwell mode
-        work_var = this->WaitForIdleCommandFn();
+        work_var = machine->WaitForIdleCondition();
         
         if (work_var != GCODE_OK)
             return work_var;
         
-        work_var = this->DwellCommandFn(m_block_data.P_value);
+        work_var = machine->Dwell(m_block_data.P_value);
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -873,7 +866,7 @@ int GCodeParser::ParseLine(char * line)
     if ((modal_group_flags & MODAL_GROUP_G10_BIT) != 0)
     {
         // Wait for idle condition
-        work_var = this->WaitForIdleCommandFn();
+        work_var = machine->WaitForIdleCondition();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -930,7 +923,7 @@ int GCodeParser::ParseLine(char * line)
         // queued commands
         
         // Wait for idle condition before attempt to change flow mode
-        work_var = this->WaitForIdleCommandFn();
+        work_var = machine->WaitForIdleCondition();
         
         if (work_var != GCODE_OK)
             return work_var;
@@ -965,13 +958,13 @@ int GCodeParser::ParseLine(char * line)
             if (m_check_mode == false)
             {
                 // Notify of spindle changes
-                work_var = this->SpindleCommandFn(m_parser_modal_state.spindle_mode, m_spindle_speed);
+                work_var = machine->SendSpindleCommand(m_parser_modal_state.spindle_mode, m_spindle_speed);
                 
                 if (work_var != GCODE_OK)
                     return work_var;
                 
                 // Notify of coolant changes
-                work_var = this->CoolantCommandFn(m_parser_modal_state.coolant_mode);
+                work_var = machine->SendCoolantCommand(m_parser_modal_state.coolant_mode);
                 
                 if (work_var != GCODE_OK)
                     return work_var;
@@ -1398,7 +1391,7 @@ int GCodeParser::handle_non_modal_codes()
             uint32_t index;
             
             // Wait for idle condition before attempt to perform any homing command
-            work_var = this->WaitForIdleCommandFn();
+            work_var = machine->WaitForIdleCondition();
             
             if (work_var != GCODE_OK)
                 return work_var;
@@ -1411,7 +1404,7 @@ int GCodeParser::handle_non_modal_codes()
                     values[index] = m_block_data.coordinate_data[index];
             }
             
-            work_var = this->HomingCommandFn(&values[0], isG28);
+            work_var = machine->GoHome(&values[0], isG28);
             
             if (work_var != GCODE_OK)
                 return work_var;
