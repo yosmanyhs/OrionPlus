@@ -159,6 +159,12 @@ void Init_GPIO_Pins(void)
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
     
+    /* Configure GPIO D pin 3 as USB connection detect */
+    GPIO_InitStruct.Pin = USB_CONN_DETECT_Pin;              // PD3
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(USB_CONN_DETECT_GPIO_Port, &GPIO_InitStruct);
+    
     // Clear Pending register bits (set during configuration)
     exti_pr = EXTI->PR;
     EXTI->PR = exti_pr;

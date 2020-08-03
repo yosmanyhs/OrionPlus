@@ -106,7 +106,7 @@ public:
     const char* GetGCodeErrorText(uint32_t code) { return GCodeParser::GetErrorText(code); } 
     
     int GoHome(float* target, bool isG28);
-    int DoProbe();
+    int DoProbe(float* target);
     int SendSpindleCommand(GCODE_MODAL_SPINDLE_MODES mode, float spindle_rpm);
     int SendCoolantCommand(GCODE_MODAL_COOLANT_MODES mode);
     int Dwell(float p_time_secs);
@@ -143,6 +143,7 @@ protected:
     TimerHandle_t               m_user_btn_read_timer;
 
     EventGroupHandle_t          m_input_events_group;
+    uint32_t                    m_fault_event_conditions;
     
     ///////////////////////////////////////////////////////////////////////////////////////////
 

@@ -71,6 +71,8 @@ MachineCore::MachineCore(void)
                                          
     // Create event group to register/detect input events to the machine
     m_input_events_group = xEventGroupCreate();
+                                         
+    m_fault_event_conditions = 0;
 }
 
 
@@ -142,12 +144,12 @@ BaseType_t MachineCore::NotifyOfEvent(uint32_t it_evt_src)
         if (HAL_GPIO_ReadPin(GLOBAL_FAULT_GPIO_Port, GLOBAL_FAULT_Pin) != GPIO_PIN_SET)
         {
             // Global Fault = 0. Stepper motors fault condition
-            //xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  STEPPER_FAULT_EVENT, &high_prio_woken);
+            m_fault_event_conditions |= STEPPER_FAULT_EVENT;
         }
         else if (HAL_GPIO_ReadPin(LIM_X_GPIO_Port, LIM_X_Pin) != GPIO_PIN_RESET)
         {
             // Limit X = 1
-            //xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_X_MIN_EVENT, &high_prio_woken);
+            m_fault_event_conditions |= LIMIT_X_MIN_EVENT;
         }
     }
     
@@ -155,14 +157,14 @@ BaseType_t MachineCore::NotifyOfEvent(uint32_t it_evt_src)
     if ((it_evt_src & (1 << 7)) != 0)
     {
         // Limit Y
-        //xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_Y_MIN_EVENT, &high_prio_woken);
+        m_fault_event_conditions |= LIMIT_Y_MIN_EVENT;
     }
     
     // EXTI8
     if ((it_evt_src & (1 << 8)) != 0)
     {
         // Limit Z
-        //xEventGroupSetBitsFromISR(global_task_info.input_events_handle,  LIMIT_Z_MIN_EVENT, &high_prio_woken);
+        m_fault_event_conditions |= LIMIT_Z_MIN_EVENT;
     }
     
     return pdFALSE;
@@ -173,7 +175,7 @@ int MachineCore::GoHome(float* target, bool isG28)
     return 0; 
 }
 
-int MachineCore::DoProbe()
+int MachineCore::DoProbe(float* target)
 {
     return 0;
 }
@@ -206,6 +208,10 @@ int MachineCore::SendCoolantCommand(GCODE_MODAL_COOLANT_MODES mode)
 int MachineCore::Dwell(float p_time_secs) 
 { 
     int ms = (int)(p_time_secs * 1000);
+    
+    // During check mode this method does nothing
+    if (m_gcode_parser->IsCheckModeActive())
+        return 0;
     
     // Notify the system is dwelling
     m_dwell_active = true;

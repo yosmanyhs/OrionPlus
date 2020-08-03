@@ -1174,7 +1174,7 @@ int GCodeParser::check_codes_using_axes()
 		((m_block_data.block_modal_state.motion_mode >= MODAL_MOTION_MODE_CANNED_DRILL_G81) &&
 		(m_block_data.block_modal_state.motion_mode <= MODAL_MOTION_MODE_CANNED_DRILL_PECK_G83)))
 	{
-		if ((m_block_data.feed_rate == 0.0f) && (m_feed_rate == 0.0f))
+		if ((m_block_data.feed_rate == 0.0f) && (m_feed_rate == 0.0f) && (m_axis_command_type != AXIS_COMMAND_TYPE_NONE))
 		{
 			// Feed rate not specified or invalid.
 			return GCODE_ERROR_INVALID_FEEDRATE_VALUE;

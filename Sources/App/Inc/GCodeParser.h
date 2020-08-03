@@ -454,8 +454,9 @@ public:
         void ResetParser();
         int ParseLine(char* line);
 
-        void EnableCheckMode() { m_check_mode = true; }
-        void DisableCheckMode() { m_check_mode = false; } 
+        inline void EnableCheckMode() { m_check_mode = true; }
+        inline void DisableCheckMode() { m_check_mode = false; } 
+        inline bool IsCheckModeActive() { return m_check_mode; } 
 
         static const char*  GetErrorText(uint32_t error_code);
 
