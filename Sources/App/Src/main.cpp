@@ -7,20 +7,26 @@
 #include "spi_ports.h"
 #include "uart_ports.h"
 #include "adc.h"
+#include "watchdog.h"
 
 #include "settings_manager.h"
 #include "user_tasks.h"
 
 
-
 static void SystemClock_Config(void);
 static void Error_Handler(void);
+
+static void CheckResetCause(void);
 
 
 int main(void)
 {
+    CheckResetCause();
+    
     HAL_Init();
     SystemClock_Config();
+    
+    Init_WatchDog();
     
     Init_GPIO_Pins();
     Init_DMA_Controller();
@@ -90,6 +96,44 @@ static void SystemClock_Config(void)
     /** Enables the Clock Security System */
     HAL_RCC_EnableCSS();
 }
+
+static void CheckResetCause(void)
+{
+    uint32_t flags = RCC->CSR;
+    
+    if ((flags & RCC_CSR_LPWRRSTF) != 0)
+    {
+        // Low power management reset
+    }
+    else if ((flags & RCC_CSR_WWDGRSTF) != 0)
+    {
+        // Window watchdog reset
+    }
+    else if ((flags & RCC_CSR_IWDGRSTF) != 0)
+    {
+        // Independent watchdog reset
+    }
+    else if ((flags & RCC_CSR_SFTRSTF) != 0)
+    {
+        // software reset
+    }
+    else if ((flags & RCC_CSR_PORRSTF) != 0)
+    {
+        // power on reset
+    }
+    else if ((flags & RCC_CSR_BORRSTF) != 0)
+    {
+        // brown out reset
+    }
+    else if ((flags & RCC_CSR_PINRSTF) != 0)
+    {
+        // NRST pin reset
+    }   
+
+    // Clear reset cause
+    __HAL_RCC_CLEAR_RESET_FLAGS();
+}
+
 
 /**
   * @brief  This function is executed in case of error occurrence.

@@ -1404,7 +1404,7 @@ int GCodeParser::handle_non_modal_codes()
                     values[index] = m_block_data.coordinate_data[index];
             }
             
-            work_var = machine->GoHome(&values[0], isG28);
+            work_var = machine->GoHome(&values[0], m_value_group_flags, isG28);
             
             if (work_var != GCODE_OK)
                 return work_var;

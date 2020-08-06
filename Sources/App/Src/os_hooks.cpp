@@ -2,6 +2,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "pins.h"
+#include "watchdog.h"
 
 #include "gpio.h"
 #include "lvgl.h"
@@ -22,6 +23,9 @@ extern "C" void vApplicationIdleHook( void )
     
     if (counter == 0)
         machine->OnIdle();    
+    
+    // Keep system alive
+    Refresh_WatchDog();
 }
 
 extern "C" void vApplicationTickHook( void )

@@ -105,8 +105,8 @@ public:
     int ParseGCodeLine(char* line) { return m_gcode_parser->ParseLine(line); }
     const char* GetGCodeErrorText(uint32_t code) { return GCodeParser::GetErrorText(code); } 
     
-    int GoHome(float* target, bool isG28);
-    int DoProbe(float* target);
+    int GoHome(float* target, uint32_t spec_value_mask, bool isG28);
+    int DoProbe(float* target, uint32_t spec_value_mask);
     int SendSpindleCommand(GCODE_MODAL_SPINDLE_MODES mode, float spindle_rpm);
     int SendCoolantCommand(GCODE_MODAL_COOLANT_MODES mode);
     int Dwell(float p_time_secs);

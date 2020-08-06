@@ -437,6 +437,11 @@
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\MachineCore.cpp</FilePath>
             </File>
+            <File>
+              <FileName>watchdog.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\watchdog.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -671,6 +676,16 @@
               <FileName>stm32f4xx_hal_exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_iwdg.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_wwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_wwdg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1703,6 +1718,11 @@
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\MachineCore.cpp</FilePath>
             </File>
+            <File>
+              <FileName>watchdog.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\watchdog.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2039,6 +2059,16 @@
               <FileName>stm32f4xx_hal_exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_iwdg.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_wwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_wwdg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3122,6 +3152,11 @@
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\MachineCore.cpp</FilePath>
             </File>
+            <File>
+              <FileName>watchdog.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\watchdog.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3458,6 +3493,16 @@
               <FileName>stm32f4xx_hal_exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_iwdg.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_wwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Drivers\Src\stm32f4xx_hal_wwdg.c</FilePath>
             </File>
           </Files>
         </Group>

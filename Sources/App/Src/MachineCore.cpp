@@ -170,12 +170,12 @@ BaseType_t MachineCore::NotifyOfEvent(uint32_t it_evt_src)
     return pdFALSE;
 }
 
-int MachineCore::GoHome(float* target, bool isG28) 
+int MachineCore::GoHome(float* target, uint32_t spec_value_mask, bool isG28) 
 { 
     return 0; 
 }
 
-int MachineCore::DoProbe(float* target)
+int MachineCore::DoProbe(float* target, uint32_t spec_value_mask)
 {
     return 0;
 }
