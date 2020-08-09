@@ -77,6 +77,8 @@ public:
         int AppendLine(const float* target_mm, float spindle_speed, float rate_mm_s, bool inverseTimeRate = false);
         
         float max_allowable_speed( float acceleration, float target_velocity, float distance);
+        
+        void ResetPosition() { memset((void*)&m_position_steps[0], 0, sizeof(m_position_steps)); } 
     
         static const char*  GetErrorText(uint32_t error_code);
 

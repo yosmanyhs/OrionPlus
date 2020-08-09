@@ -969,6 +969,8 @@ int GCodeParser::ParseLine(char * line)
                 if (work_var != GCODE_OK)
                     return work_var;
             }
+            
+            machine->ClearHalt();
         }
     }
     
@@ -1168,13 +1170,15 @@ int GCodeParser::check_codes_using_axes()
 		}
     }
 
-	// Check for invalid feedrate for G1/G2/G3, G81/G82/G83/G84/G85/G86/G87/G88/G89
+	// Check for invalid feedrate for G1/G2/G3, G81/G82/G83/G84/G85/G86/G87/G88/G89. Exclude possible homing commands (G28/G30)
 	if (((m_block_data.block_modal_state.motion_mode > MODAL_MOTION_MODE_SEEK) &&
 		(m_block_data.block_modal_state.motion_mode < MODAL_MOTION_MODE_CANCEL_MOTION)) ||
 		((m_block_data.block_modal_state.motion_mode >= MODAL_MOTION_MODE_CANNED_DRILL_G81) &&
 		(m_block_data.block_modal_state.motion_mode <= MODAL_MOTION_MODE_CANNED_DRILL_PECK_G83)))
 	{
-		if ((m_block_data.feed_rate == 0.0f) && (m_feed_rate == 0.0f) && (m_axis_command_type != AXIS_COMMAND_TYPE_NONE))
+		if ((m_block_data.feed_rate == 0.0f) && (m_feed_rate == 0.0f) && 
+            ((m_axis_command_type == AXIS_COMMAND_TYPE_MOTION) ||
+             (m_axis_command_type == AXIS_COMMAND_TYPE_CANNED_CYCLE)))
 		{
 			// Feed rate not specified or invalid.
 			return GCODE_ERROR_INVALID_FEEDRATE_VALUE;
@@ -1187,7 +1191,6 @@ int GCodeParser::check_codes_using_axes()
 			// Feed rate missing using inverse time feed rate move with G1/G2/G3 ...
 			return GCODE_ERROR_MISSING_FEEDRATE_INVERSE_TIME_MODE;
 		}
-
 	}
 
     return GCODE_OK;
@@ -2254,6 +2257,18 @@ const char* GCodeParser::GetErrorText(uint32_t error_code)
         
     case GCODE_ERROR_TARGET_OUTSIDE_LIMIT_VALUES:
         return("The specified target is outside of the limit values");
+        
+    case GCODE_ERROR_HOMING_LOCATE_LIMITS:
+        return("Homing Error: Could not locate all limit switches");
+        
+    case GCODE_ERROR_HOMING_RELEASE_LIMITS:
+        return("Homing Error: Limit switch(es) still engaged");
+        
+    case GCODE_ERROR_HOMING_CONFIRM_LIMITS:
+        return("Homing Error: Could not confirm all limit switches");
+        
+    case GCODE_ERROR_HOMING_FINISH_RELEASE:
+        return("Homing Error: Could not complete homing. Limit switch(es) still engaged");
     
     default:
         return("Unknown error code");

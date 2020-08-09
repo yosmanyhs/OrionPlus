@@ -167,10 +167,7 @@ void Init_GPIO_Pins(void)
     
     // Clear Pending register bits (set during configuration)
     exti_pr = EXTI->PR;
-    EXTI->PR = exti_pr;
-    
-    HAL_NVIC_SetPriority(EXTI9_5_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY, 0);
-    HAL_NVIC_EnableIRQ(EXTI9_5_IRQn); 
+    EXTI->PR = exti_pr;   
 }
 
 // Notify MachineCore of the occurrence of any of these events
@@ -178,9 +175,7 @@ void Init_GPIO_Pins(void)
 extern "C" void EXTI9_5_IRQHandler(void)
 {
     uint32_t pr_value = EXTI->PR;
-    BaseType_t high_prio_woken = pdFALSE;
-    
-    high_prio_woken = machine->NotifyOfEvent(pr_value);
+    BaseType_t high_prio_woken = machine->NotifyOfEvent(pr_value);
     
     // Clear all pending bits
     EXTI->PR = pr_value;

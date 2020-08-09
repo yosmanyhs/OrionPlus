@@ -26,7 +26,7 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
     
-    Init_WatchDog();
+    //Init_WatchDog();
     
     Init_GPIO_Pins();
     Init_DMA_Controller();

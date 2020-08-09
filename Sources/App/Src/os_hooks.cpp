@@ -25,7 +25,7 @@ extern "C" void vApplicationIdleHook( void )
         machine->OnIdle();    
     
     // Keep system alive
-    Refresh_WatchDog();
+    //Refresh_WatchDog();
 }
 
 extern "C" void vApplicationTickHook( void )

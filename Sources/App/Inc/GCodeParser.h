@@ -129,6 +129,14 @@ enum GCODE_STATUS_RESULTS
 	GCODE_ERROR_MISSING_FEEDRATE_INVERSE_TIME_MODE,
     
     GCODE_ERROR_TARGET_OUTSIDE_LIMIT_VALUES,
+    
+    /* Homing related errors */
+    GCODE_ERROR_HOMING_LOCATE_LIMITS,
+    GCODE_ERROR_HOMING_RELEASE_LIMITS,
+    GCODE_ERROR_HOMING_CONFIRM_LIMITS,
+    GCODE_ERROR_HOMING_FINISH_RELEASE,
+    
+    
 };
 
 ///////////////////////////////////////////////////////////////////////////////

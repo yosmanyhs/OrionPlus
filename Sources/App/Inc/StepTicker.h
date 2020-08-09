@@ -2,11 +2,13 @@
 #define STEP_TICKER_H
 
 #include <stdint.h>
+#include <string.h>
 #include "FreeRTOS.h"
 #include "task.h"
 
 #include "Block.h"
 #include "Conveyor.h"
+#include "GCodeParser.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +28,8 @@ public:
     float get_frequency() const { return frequency; }
     void unstep_tick();
     
-    const Block *get_current_block() const { return current_block; }
+    inline const int32_t* GetSteppersPosition() { return this->m_stepper_positions; };
+    void ResetSteppersPosition() { memset((void*)&m_stepper_positions[0], 0, sizeof(m_stepper_positions)); } 
 
     void step_tick (void);
     void start();
@@ -65,6 +68,8 @@ private:
     Conveyor* m_conveyor;
 
     volatile bool running;
+
+    int32_t m_stepper_positions[TOTAL_AXES_COUNT];
 };
 
 

@@ -182,9 +182,6 @@ void Conveyor::check_queue(bool force)
             allow_fetch = true;
             __HAL_TIM_ENABLE(&step_timer_handle);
             
-            // Turn On Activity LED [Write 0]
-            HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-            
             if (idle_timer_running == true)
             {
                 // Stop and reset idling timer
@@ -263,4 +260,9 @@ void Conveyor::flush_queue()
     // now wait until the block queue has been flushed
     wait_for_idle(false);
     flush = false;
+}
+
+void Conveyor::force_flush_queue()
+{
+    queue.flush_now();
 }

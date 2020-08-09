@@ -37,6 +37,8 @@ StepTicker::StepTicker()
     this->motor_enable_bits = 0;
     this->inversion_mask_bits_steps = ((uint8_t)(Settings_Manager::GetSignalInversionMasks() & SIGNAL_INVERT_STEP_PINS_MASK));  
     this->inversion_mask_bits_dirs =  ((uint8_t)(Settings_Manager::GetSignalInversionMasks() & SIGNAL_INVERT_DIR_PINS_MASK));  
+    
+    memset((void*)&this->m_stepper_positions[0], 0, sizeof(this->m_stepper_positions));
 }
 
 StepTicker::~StepTicker()
@@ -110,6 +112,9 @@ void StepTicker::EnableStepperDrivers(bool enable)
             bsrr_val = (STEP_ENABLE_Pin);
         else
             bsrr_val = (STEP_ENABLE_Pin << 16);
+        
+        // Turn On Activity LED [Write 0]
+        HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
     }
     else
     {
@@ -117,6 +122,9 @@ void StepTicker::EnableStepperDrivers(bool enable)
             bsrr_val = (STEP_ENABLE_Pin << 16);
         else
             bsrr_val = (STEP_ENABLE_Pin);
+        
+        // Turn Off Activity LED [Write 1]
+        HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
     }
     
     STEP_ENABLE_GPIO_Port->BSRR = bsrr_val;
@@ -190,18 +198,12 @@ void StepTicker::step_tick (void)
             if (!running) 
             {
                 __HAL_TIM_DISABLE(&step_timer_handle);
-                
-                // Turn Off Activity LED [Write 1]
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
                 return;
             }
         }
         else
         {
             __HAL_TIM_DISABLE(&step_timer_handle);
-            
-            // Turn Off Activity LED [Write 1]
-            HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
             return;
         }
     }
@@ -275,6 +277,12 @@ void StepTicker::step_tick (void)
             {
                 execute_this_steps |= (1 << (4 - (motor_idx * 2)));     // Swap/Move bits ZYX -> 0X0Y0Z
                 ismoving = true;
+                
+                // Update current stepper's step count
+                if (current_block->direction_bits & (1 << motor_idx))
+                    this->m_stepper_positions[motor_idx]--;
+                else
+                    this->m_stepper_positions[motor_idx]++;
             }
 
             if (!ismoving || current_block->tick_info[motor_idx].step_count == current_block->tick_info[motor_idx].steps_to_move) 

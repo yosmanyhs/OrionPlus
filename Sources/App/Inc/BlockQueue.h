@@ -38,6 +38,7 @@ public:
      */
     bool is_empty(void) const;
     bool is_full(void) const;
+    void flush_now();
 
     /*
      * resize

@@ -27,9 +27,8 @@ public:
     void start();
 
     void on_idle();
-    void on_halt(void *);
 
-    void wait_for_idle(bool wait_for_motors=true);
+    void wait_for_idle(bool wait_for_motors = true);
     bool is_queue_empty() { return queue.is_empty(); };
     bool is_queue_full() { return queue.is_full(); };
     bool is_idle() const;
@@ -38,15 +37,15 @@ public:
     bool get_next_block(Block **block);
     void block_finished();
 
-    void flush_queue(void);
+    void flush_queue();
     float get_current_feedrate() const { return current_feedrate; }
     void force_queue() { check_queue(true); }
 
-    
+    void force_flush_queue();
 
 private:
     void check_queue(bool force= false);
-    void queue_head_block(void);
+    void queue_head_block();
 
     BlockQueue queue;  // Queue of Blocks
 

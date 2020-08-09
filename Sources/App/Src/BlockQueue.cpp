@@ -130,6 +130,10 @@ bool BlockQueue::is_full(void) const
     return r;
 }
 
+void BlockQueue::flush_now()
+{
+    tail_i = head_i;
+}
 
     /*
  * resize

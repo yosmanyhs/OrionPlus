@@ -90,6 +90,10 @@
 #define LIM_Z_Pin GPIO_PIN_8
 #define LIM_Z_GPIO_Port GPIOC               //  PC8     [Onboard pullup PR3]
 
+#define LIMITS_GPIO_Port    GPIOC           // Limit pins are located at PC6, PC7, PC8
+#define LIMITS_Mask (LIM_X_Pin | LIM_Y_Pin | LIM_Z_Pin)
+#define LIMITS_Offset   6
+
 #define STEP_ENABLE_Pin GPIO_PIN_9
 #define STEP_ENABLE_GPIO_Port GPIOC         //  PC9     [Onboard pullup PR3]
 

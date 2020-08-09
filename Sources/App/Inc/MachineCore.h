@@ -29,6 +29,12 @@ typedef enum GCODE_SOURCE_OPTIONS
 typedef enum HOMING_STATE_VALUES
 {
     HOMING_IDLE,
+    HOMING_SEEK_LIMITS,
+    HOMING_RELEASE_LIMITS,
+    HOMING_CONFIRM_LIMITS,
+    HOMING_FINISH,
+    HOMING_DONE,
+    HOMING_ERROR
     
 }HOMING_STATE_VALUES;
 
@@ -81,6 +87,8 @@ public:
     bool StartStepperIdleTimer();
     void StopStepperIdleTimer();
     void Halt();
+
+    inline void ClearHalt() { m_system_halted = false; } 
     
     // Called from EXTI interrupt context
     BaseType_t NotifyOfEvent(uint32_t it_evt_src);
@@ -129,6 +137,8 @@ protected:
 
     GCODE_SOURCE_OPTIONS        m_gcode_source;
 
+    float                       m_current_stepper_pos[TOTAL_AXES_COUNT];
+
     // Homing Control
     HOMING_STATE_VALUES         m_homing_state;
     uint32_t                    m_axes_homing_now;
@@ -144,6 +154,12 @@ protected:
 
     EventGroupHandle_t          m_input_events_group;
     uint32_t                    m_fault_event_conditions;
+    TaskHandle_t                m_safety_task_handle;
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    
+    void disable_limit_interrupts();
+    void enable_limit_interrupts();
     
     ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -152,6 +168,8 @@ protected:
     static void steppers_idle_timeout_callback(TimerHandle_t xTimer);
     static void delayed_startup_callback(TimerHandle_t xTimer);
     static void read_user_buttons_callback(TimerHandle_t xTimer);
+    
+    static void safety_task_entry(void* param);
 };
 
 #endif
