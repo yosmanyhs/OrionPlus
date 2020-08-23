@@ -37,17 +37,17 @@ static StreamBufferHandle_t     tx_buffer;
 //    "M30"
 //};
 
-static const char * hello_msg = "\r\nGrbl 1.1h ['$' for help]\r\n";
+//static const char * hello_msg = "\r\nGrbl 1.1h ['$' for help]\r\n";
 
-static const char * fake_settings = \
-    "$0=10\r\n$1=25\r\n$2=0\r\n$3=0\r\n$4=0\r\n$5=0\r\n$6=0\r\n" \
-    "$10=1\r\n$11=0.010\r\n$12=0.002\r\n$13=0\r\n" \
-    "$20=0\r\n$21=0\r\n$22=1\r\n$23=0\r\n$24=25.0\r\n$25=500\r\n$26=250\r\n$27=1\r\n" \
-    "$30=1000\r\n$31=0\r\n$32=0\r\n" \
-    "$100=200\r\n$101=200\r\n$102=200\r\n" \
-    "$110=500\r\n$111=500\r\n$112=500\r\n" \
-    "$120=10\r\n$121=10\r\n$122=10\r\n" \
-    "$130=360\r\n$131=360\r\n$132=200\r\n";
+//static const char * fake_settings = \
+//    "$0=10\r\n$1=25\r\n$2=0\r\n$3=0\r\n$4=0\r\n$5=0\r\n$6=0\r\n" \
+//    "$10=1\r\n$11=0.010\r\n$12=0.002\r\n$13=0\r\n" \
+//    "$20=0\r\n$21=0\r\n$22=1\r\n$23=0\r\n$24=25.0\r\n$25=500\r\n$26=250\r\n$27=1\r\n" \
+//    "$30=1000\r\n$31=0\r\n$32=0\r\n" \
+//    "$100=200\r\n$101=200\r\n$102=200\r\n" \
+//    "$110=500\r\n$111=500\r\n$112=500\r\n" \
+//    "$120=10\r\n$121=10\r\n$122=10\r\n" \
+//    "$130=360\r\n$131=360\r\n$132=200\r\n";
 
 
 void SerialTask_Entry(void * pvParam)

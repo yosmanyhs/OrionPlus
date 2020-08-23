@@ -193,7 +193,7 @@ BaseType_t MachineCore::NotifyOfEvent(uint32_t it_evt_src)
 
 int MachineCore::GoHome(float* target, uint32_t spec_value_mask, bool isG28) 
 {
-    int status = 0;
+    int status = GCODE_OK;
     float move_tgt[TOTAL_AXES_COUNT];
     uint16_t limit_read_value;
     bool idle_condition;
@@ -419,6 +419,13 @@ int MachineCore::GoHome(float* target, uint32_t spec_value_mask, bool isG28)
     m_homing_state = HOMING_IDLE;
     this->m_axes_homing_now = false;
     enable_limit_interrupts();
+    
+    if (status == GCODE_OK && (spec_value_mask & VALUE_SET_ANY_AXES_BITS) != 0)
+    {
+        // If homing finished successfully then go to specified target position (if specified too)
+        status = m_planner->AppendLine(target, 0.0f, SOME_LARGE_VALUE);
+    }
+    
     return status;
 }
 
