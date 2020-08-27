@@ -1186,7 +1186,9 @@ int GCodeParser::check_codes_using_axes()
 
 		// Check if Inverse time feedrate mode and feed rate not specified in this block
 		if ((m_block_data.block_modal_state.feedrate_mode == MODAL_FEEDRATE_MODE_INVERSE_TIME) &&
-			((m_value_group_flags & VALUE_SET_F_BIT) == 0))
+			((m_value_group_flags & VALUE_SET_F_BIT) == 0) && 
+            ((m_axis_command_type == AXIS_COMMAND_TYPE_MOTION) || 
+             (m_axis_command_type == AXIS_COMMAND_TYPE_CANNED_CYCLE)))
 		{
 			// Feed rate missing using inverse time feed rate move with G1/G2/G3 ...
 			return GCODE_ERROR_MISSING_FEEDRATE_INVERSE_TIME_MODE;
