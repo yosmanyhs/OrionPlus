@@ -29,7 +29,7 @@ void Init_UserTasks_and_Objects(void)
     
     machine->Initialize();   
     
-//  xTaskCreate(UI_BootTask_Entry, "UIBOOT", UI_BOOT_TASK_STACK_SIZE, NULL, UI_BOOT_TASK_PRIORITY, NULL);
+    xTaskCreate(UI_BootTask_Entry, "UIBOOT", UI_BOOT_TASK_STACK_SIZE, (void*)machine, UI_BOOT_TASK_PRIORITY, NULL);
 //  xTaskCreate(USBTask_Entry, "USBTASK", USB_TASK_STACK_SIZE, NULL, USB_TASK_PRIORITY, &usb_task_handle);
 //  xTaskCreate(DiskTask_Entry, "DSKTASK", DISK_TASK_STACK_SIZE, NULL, DISK_TASK_PRIORITY, &disk_task_handle);
 

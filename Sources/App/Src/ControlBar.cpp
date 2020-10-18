@@ -45,7 +45,7 @@ void ControlBarWindow::Create(lv_obj_t * parent)
         // Adjust its parameters
         lv_obj_set_pos(m_control_btn_handle_array[index], xpos, ypos);
         lv_obj_set_size(m_control_btn_handle_array[index], 60, 60);
-        lv_obj_set_user_data(m_control_btn_handle_array[index], myud);
+        //lv_obj_set_user_data(m_control_btn_handle_array[index], myud);
         
         lv_btn_set_layout(m_control_btn_handle_array[index], LV_LAYOUT_CENTER);
         lv_obj_set_event_cb(m_control_btn_handle_array[index], ControlBarWindow::control_bar_button_click);
@@ -143,7 +143,7 @@ void ControlBarWindow::display_main_menu()
             
             lv_obj_set_size(child1, MENU_WIDTH - 20, 64);
             lv_obj_set_pos(child1, 10, ypos);
-            lv_obj_set_user_data(child1, myud);
+            //lv_obj_set_user_data(child1, myud);
             lv_obj_set_event_cb(child1, ControlBarWindow::control_bar_button_click);
             lv_btn_set_layout(child1, LV_LAYOUT_OFF);
             
@@ -189,66 +189,66 @@ void ControlBarWindow::control_bar_update_stat_icons(uint8_t stat_flags)
 
 void ControlBarWindow::control_bar_button_click(lv_obj_t * btn, lv_event_t event)
 {
-    static uint8_t pwr_state = 1;
-    ControlBarWindow* self_instance = (ControlBarWindow*)btn->user_data.control_data;
+//    static uint8_t pwr_state = 1;
+//    ControlBarWindow* self_instance = (ControlBarWindow*)btn->user_data.control_data;
 
-    if (event == LV_EVENT_CLICKED)
-    {
-        switch ((uint32_t)btn->user_data.control_id)
-        {
-            case ControlBar_Button_Power: // Power button
-            {
-                if (pwr_state == 0)
-                {
-                    lv_port_disp_NT35510_set_backlight(100);
-                    pwr_state = 1;
-                }
-                else
-                {
-                    lv_port_disp_NT35510_set_backlight(0);
-                    pwr_state = 0;
-                }
-            }
-            break;
-            
-            case ControlBar_Button_Menu: // Main menu
-            {
-                self_instance->display_main_menu();
-            }
-            break;
-            
-            case ControlBar_MenuBtn_Home:
-            {
-            }
-            break;
-            
-            case ControlBar_Button_Start:
-            {
-            }
-            break;
-            
-//            case ControlBar_Button_Pause:
+//    if (event == LV_EVENT_CLICKED)
+//    {
+//        switch ((uint32_t)btn->user_data.control_id)
+//        {
+//            case ControlBar_Button_Power: // Power button
 //            {
-//                const char* txt_mode[] = { "G0", "G1", "G2", "G3", "G80" };
-//                const char* txt_plane[] = { "XY", "XZ", "YZ" };
-//                const char* txt_absinc[] = { "Abs", "Inc" };
-//                const char* txt_mmin[] = { "mm", "in" };
-//                const char* txt_spin[] = { "CW", "CCW", "Off" };
-//                const char* txt_cool[] = { "Mist", "Flood", "None" }; 
-//                
-//                lv_label_set_text(status_label_handle_array[0], txt_mode[txt % 5]);
-//                lv_label_set_text(status_label_handle_array[1], txt_plane[txt % 3]);
-//                lv_label_set_text(status_label_handle_array[2], txt_absinc[txt % 2]);
-//                lv_label_set_text(status_label_handle_array[3], txt_mmin[txt % 2]);
-//                lv_label_set_text(status_label_handle_array[4], txt_spin[txt % 3]);
-//                lv_label_set_text(status_label_handle_array[5], txt_cool[txt % 3]);
-//                
-//                txt++;
+//                if (pwr_state == 0)
+//                {
+//                    lv_port_disp_NT35510_set_backlight(100);
+//                    pwr_state = 1;
+//                }
+//                else
+//                {
+//                    lv_port_disp_NT35510_set_backlight(0);
+//                    pwr_state = 0;
+//                }
 //            }
 //            break;
-            
-            default:
-                break;
-        }
-    }
+//            
+//            case ControlBar_Button_Menu: // Main menu
+//            {
+//                self_instance->display_main_menu();
+//            }
+//            break;
+//            
+//            case ControlBar_MenuBtn_Home:
+//            {
+//            }
+//            break;
+//            
+//            case ControlBar_Button_Start:
+//            {
+//            }
+//            break;
+//            
+////            case ControlBar_Button_Pause:
+////            {
+////                const char* txt_mode[] = { "G0", "G1", "G2", "G3", "G80" };
+////                const char* txt_plane[] = { "XY", "XZ", "YZ" };
+////                const char* txt_absinc[] = { "Abs", "Inc" };
+////                const char* txt_mmin[] = { "mm", "in" };
+////                const char* txt_spin[] = { "CW", "CCW", "Off" };
+////                const char* txt_cool[] = { "Mist", "Flood", "None" }; 
+////                
+////                lv_label_set_text(status_label_handle_array[0], txt_mode[txt % 5]);
+////                lv_label_set_text(status_label_handle_array[1], txt_plane[txt % 3]);
+////                lv_label_set_text(status_label_handle_array[2], txt_absinc[txt % 2]);
+////                lv_label_set_text(status_label_handle_array[3], txt_mmin[txt % 2]);
+////                lv_label_set_text(status_label_handle_array[4], txt_spin[txt % 3]);
+////                lv_label_set_text(status_label_handle_array[5], txt_cool[txt % 3]);
+////                
+////                txt++;
+////            }
+////            break;
+//            
+//            default:
+//                break;
+//        }
+//    }
 }

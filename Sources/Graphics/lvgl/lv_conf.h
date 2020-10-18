@@ -396,7 +396,7 @@ typedef struct custom_user_data_t
 }custom_user_data_t;
 
 /*Declare the type of the user data of object (can be e.g. `void *`, `int`, `struct`)*/
-typedef custom_user_data_t  lv_obj_user_data_t; // Add extra 8 bytes [4 + 4]
+typedef uint32_t  lv_obj_user_data_t; // Add extra 8 bytes [4 + 4]
 
 /*1: enable `lv_obj_realaign()` based on `lv_obj_align()` parameters*/
 #define LV_USE_OBJ_REALIGN          1
