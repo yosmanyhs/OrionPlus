@@ -492,6 +492,37 @@ int MachineCore::WaitForIdleCondition()
     return 0; 
 }
 
+void MachineCore::GetGlobalStatusReport(GLOBAL_STATUS_REPORT_DATA & outData)
+{
+    outData.SystemHalted = this->m_system_halted;
+    outData.FaultConditions = this->m_fault_event_conditions;
+    outData.FeedHoldActive = this->m_feed_hold;
+    outData.SteppersEnabled = this->m_step_ticker->AreMotorsRunning();
+    outData.CheckModeEnabled = this->m_gcode_parser->IsCheckModeActive();
+    
+    outData.OriginCoordinates = this->m_gcode_parser->ReadOriginCoords();
+    outData.OffsetCoordinates = this->m_gcode_parser->ReadOffsetCoords();
+    
+    outData.CurrentPositions = this->m_current_stepper_pos;
+    
+    // TODO: Fix this
+    outData.TargetPositions = NULL;
+    
+    outData.ProbingPositions = this->m_probe_position;
+    outData.HomingState = this->m_homing_state;
+    outData.ProbingState = this->m_probe_state;
+    
+    this->m_gcode_parser->ReadParserModalState(&outData.ModalState);
+    
+    outData.CurrentFeedRate = this->m_conveyor->get_current_feedrate();
+    outData.CurrentSpindleRPM = this->m_spindle->GetCurrentRPM();
+    outData.CurrentSpindleTool = this->m_spindle->GetCurrentToolNumber();
+    
+    outData.FileParsingPercent = 0;
+    outData.CurrentFileName = NULL;
+    outData.GCodeSource = GCODE_SOURCE_SERIAL_CONSOLE;    
+}
+
 void MachineCore::disable_limit_interrupts()
 {
     NVIC_DisableIRQ(EXTI9_5_IRQn);

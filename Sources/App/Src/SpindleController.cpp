@@ -7,7 +7,8 @@
 
 SpindleController::SpindleController()
 {
-    
+    m_current_rpm = 0;
+    m_current_tool_number = 0;
 }
 
 

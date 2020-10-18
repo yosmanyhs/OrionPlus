@@ -2277,3 +2277,7 @@ const char* GCodeParser::GetErrorText(uint32_t error_code)
     }
 }
 
+void GCodeParser::ReadParserModalState(GCodeModalData* block) const
+{
+    memcpy(block, &this->m_parser_modal_state, sizeof(GCodeModalData));
+}

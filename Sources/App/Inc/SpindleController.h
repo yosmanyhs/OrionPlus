@@ -47,10 +47,14 @@ public:
     ~SpindleController();
 
     bool InmediateStop();   // For halt cases
-        
+
+    inline uint32_t GetCurrentRPM() { return m_current_rpm; };
+    inline uint8_t  GetCurrentToolNumber() { return m_current_tool_number; }
+    
 protected:
     ///////////////////////////////////////////////////////////////////////////////////////////
-
+    uint32_t m_current_rpm;
+    uint8_t m_current_tool_number;
 };
 
 #endif

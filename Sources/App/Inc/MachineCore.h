@@ -12,6 +12,16 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "GCodeParser.h"
+#include "Planner.h"
+#include "Conveyor.h"
+#include "StepTicker.h"
+#include "CoolantController.h"
+#include "SpindleController.h"
+
+///////////////////////////////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +61,36 @@ typedef enum PROBING_STATE_VALUES
 
 ///////////////////////////////////////////////////////////////////////////////
 
+typedef struct GLOBAL_STATUS_REPORT_DATA
+{
+    bool SystemHalted;
+    uint32_t FaultConditions;
+    
+    bool FeedHoldActive;
+    bool SteppersEnabled;
+    bool CheckModeEnabled;
+    
+    const float* OriginCoordinates;
+    const float* OffsetCoordinates;
+    
+    const float* CurrentPositions;
+    const float* TargetPositions;
+    const float* ProbingPositions;
+    
+    HOMING_STATE_VALUES HomingState;
+    PROBING_STATE_VALUES ProbingState;
+    GCodeModalData ModalState;
+    
+    float CurrentFeedRate;
+    uint32_t CurrentSpindleRPM;
+    uint8_t CurrentSpindleTool;
+    
+    uint8_t FileParsingPercent;  
+    const char* CurrentFileName;
+    
+    GCODE_SOURCE_OPTIONS    GCodeSource;
 
+}GLOBAL_STATUS_REPORT_DATA;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -59,13 +98,7 @@ typedef enum PROBING_STATE_VALUES
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-#include "GCodeParser.h"
-#include "Planner.h"
-#include "Conveyor.h"
-#include "StepTicker.h"
-#include "CoolantController.h"
-#include "SpindleController.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 
 class GCodeParser;
@@ -110,6 +143,9 @@ public:
     
     inline bool AreMotorsStillMoving() { return m_step_ticker->AreMotorsStillMoving(); }
     
+    inline float GetCurrentFeedrate() { return m_conveyor->get_current_feedrate(); }
+    inline const float* GetCurrentPosition() { return m_current_stepper_pos; }
+    
     int ParseGCodeLine(char* line) { return m_gcode_parser->ParseLine(line); }
     const char* GetGCodeErrorText(uint32_t code) { return GCodeParser::GetErrorText(code); } 
     
@@ -119,6 +155,8 @@ public:
     int SendCoolantCommand(GCODE_MODAL_COOLANT_MODES mode);
     int Dwell(float p_time_secs);
     int WaitForIdleCondition();
+    
+    void GetGlobalStatusReport(GLOBAL_STATUS_REPORT_DATA & outData);
         
 protected:
     

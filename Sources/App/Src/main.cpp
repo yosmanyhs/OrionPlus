@@ -134,6 +134,15 @@ static void CheckResetCause(void)
     __HAL_RCC_CLEAR_RESET_FLAGS();
 }
 
+void HAL_MspInit(void)
+{
+    // Enable all exceptions to aid in debugging
+    HAL_NVIC_EnableIRQ(MemoryManagement_IRQn);
+    HAL_NVIC_EnableIRQ(BusFault_IRQn);
+    HAL_NVIC_EnableIRQ(UsageFault_IRQn);
+    HAL_NVIC_EnableIRQ(DebugMonitor_IRQn);    
+}
+
 
 /**
   * @brief  This function is executed in case of error occurrence.

@@ -40,6 +40,7 @@ public:
     inline void DisableAllMotors() { this->motor_enable_bits = 0; }
     
     inline bool AreMotorsStillMoving() { return (this->motor_enable_bits != 0) ? true : false; }
+    inline bool AreMotorsRunning() { return this->running; }
     
     void ApplyUpdatedInversionMasks();
     void ResetStepperDrivers(bool reset);

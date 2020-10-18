@@ -467,7 +467,11 @@ public:
         inline bool IsCheckModeActive() { return m_check_mode; } 
 
         static const char*  GetErrorText(uint32_t error_code);
-
+        
+        void ReadParserModalState(GCodeModalData* block) const;
+        inline const float* ReadOriginCoords() const { return m_work_coord_sys; } 
+        inline const float* ReadOffsetCoords() const { return m_g92_coord_offset; } 
+        
     protected:
         char*           m_line;
     
