@@ -101,7 +101,7 @@ typedef int16_t lv_coord_t;
 
 /* Use the standard memcpy and memset instead of LVGL's own functions.
  * The standard functions might or might not be faster depending on their implementation. */
-#define LV_MEMCPY_MEMSET_STD    0
+#define LV_MEMCPY_MEMSET_STD    1
 
 /* Garbage Collector settings
  * Used if lvgl is binded to higher level language and the memory is managed by that language */
@@ -157,7 +157,7 @@ typedef void * lv_anim_user_data_t;
 #endif
 
 /* 1: Enable shadow drawing on rectangles*/
-#define LV_USE_SHADOW           1
+#define LV_USE_SHADOW           0
 #if LV_USE_SHADOW
 /* Allow buffering some shadow calculation
  * LV_SHADOW_CACHE_SIZE is the max. shadow size to buffer,
@@ -170,7 +170,7 @@ typedef void * lv_anim_user_data_t;
 #define LV_USE_OUTLINE  1
 
 /*1: enable pattern drawing on rectangles*/
-#define LV_USE_PATTERN  1
+#define LV_USE_PATTERN  0
 
 /*1: enable value string drawing on rectangles*/
 #define LV_USE_VALUE_STR    1
@@ -384,9 +384,9 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
 #define LV_FONT_MONTSERRAT_8     0
 #define LV_FONT_MONTSERRAT_10    0
 #define LV_FONT_MONTSERRAT_12    0
-#define LV_FONT_MONTSERRAT_14    0
+#define LV_FONT_MONTSERRAT_14    1
 #define LV_FONT_MONTSERRAT_16    0
-#define LV_FONT_MONTSERRAT_18    0
+#define LV_FONT_MONTSERRAT_18    1
 #define LV_FONT_MONTSERRAT_20    0
 #define LV_FONT_MONTSERRAT_22    1
 #define LV_FONT_MONTSERRAT_24    0
@@ -458,9 +458,6 @@ typedef void * lv_font_user_data_t;
  * No flags. Set LV_THEME_DEFAULT_FLAG 0 */
 #define LV_USE_THEME_TEMPLATE    0
 
-/* Custom theme */
-#define LV_USE_THEME_LIGHT       1
-
 /* A fast and impressive theme.
  * Flags:
  * LV_THEME_MATERIAL_FLAG_LIGHT: light theme
@@ -468,7 +465,7 @@ typedef void * lv_font_user_data_t;
  * LV_THEME_MATERIAL_FLAG_NO_TRANSITION: disable transitions (state change animations)
  * LV_THEME_MATERIAL_FLAG_NO_FOCUS: disable indication of focused state)
  * */
-#define LV_USE_THEME_MATERIAL    0
+#define LV_USE_THEME_MATERIAL    1
 
 /* Mono-color theme for monochrome displays.
  * If LV_THEME_DEFAULT_COLOR_PRIMARY is LV_COLOR_BLACK the
@@ -478,13 +475,13 @@ typedef void * lv_font_user_data_t;
 #define LV_USE_THEME_MONO        0
 
 #define LV_THEME_DEFAULT_INCLUDE            <stdint.h>      /*Include a header for the init. function*/
-#define LV_THEME_DEFAULT_INIT               lv_theme_light_init
-#define LV_THEME_DEFAULT_COLOR_PRIMARY      lv_color_hex(0x0080FF)
-#define LV_THEME_DEFAULT_COLOR_SECONDARY    lv_color_hex(0xFF7F00)
-#define LV_THEME_DEFAULT_FLAG               0
-#define LV_THEME_DEFAULT_FONT_SMALL         &lv_font_montserrat_22
+#define LV_THEME_DEFAULT_INIT               lv_theme_material_init
+#define LV_THEME_DEFAULT_COLOR_PRIMARY      lv_color_hex(0x6495ED)
+#define LV_THEME_DEFAULT_COLOR_SECONDARY    lv_color_hex(0x4B0082)
+#define LV_THEME_DEFAULT_FLAG               (LV_THEME_MATERIAL_FLAG_LIGHT | LV_THEME_MATERIAL_FLAG_NO_FOCUS)
+#define LV_THEME_DEFAULT_FONT_SMALL         &lv_font_montserrat_14
 #define LV_THEME_DEFAULT_FONT_NORMAL        &lv_font_montserrat_22
-#define LV_THEME_DEFAULT_FONT_SUBTITLE      &lv_font_montserrat_22
+#define LV_THEME_DEFAULT_FONT_SUBTITLE      &lv_font_montserrat_18
 #define LV_THEME_DEFAULT_FONT_TITLE         &lv_font_montserrat_22
 
 /*=================
@@ -590,19 +587,19 @@ typedef uint32_t lv_obj_user_data_t;
 #define LV_USE_BTNMATRIX     1
 
 /*Calendar (dependencies: -)*/
-#define LV_USE_CALENDAR 1
+#define LV_USE_CALENDAR 0
 #if LV_USE_CALENDAR
 #  define LV_CALENDAR_WEEK_STARTS_MONDAY    0
 #endif
 
 /*Canvas (dependencies: lv_img)*/
-#define LV_USE_CANVAS   1
+#define LV_USE_CANVAS   0
 
 /*Check box (dependencies: lv_btn, lv_label)*/
 #define LV_USE_CHECKBOX       1
 
 /*Chart (dependencies: -)*/
-#define LV_USE_CHART    1
+#define LV_USE_CHART    0
 #if LV_USE_CHART
 #  define LV_CHART_AXIS_TICK_LABEL_MAX_LEN    256
 #endif
@@ -611,10 +608,10 @@ typedef uint32_t lv_obj_user_data_t;
 #define LV_USE_CONT     1
 
 /*Color picker (dependencies: -*/
-#define LV_USE_CPICKER   1
+#define LV_USE_CPICKER   0
 
 /*Drop down list (dependencies: lv_page, lv_label, lv_symbol_def.h)*/
-#define LV_USE_DROPDOWN    1
+#define LV_USE_DROPDOWN    0
 #if LV_USE_DROPDOWN != 0
 /*Open and close default animation time [ms] (0: no animation)*/
 #  define LV_DROPDOWN_DEF_ANIM_TIME     200
@@ -627,7 +624,7 @@ typedef uint32_t lv_obj_user_data_t;
 #define LV_USE_IMG      1
 
 /*Image Button (dependencies: lv_btn*/
-#define LV_USE_IMGBTN   1
+#define LV_USE_IMGBTN   0
 #if LV_USE_IMGBTN
 /*1: The imgbtn requires left, mid and right parts and the width can be set freely*/
 #  define LV_IMGBTN_TILED 0

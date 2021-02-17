@@ -28,7 +28,7 @@
     <TargetOption>
       <CLKADS>12000000</CLKADS>
       <OPTTT>
-        <gFlags>0</gFlags>
+        <gFlags>1</gFlags>
         <BeepAtEnd>1</BeepAtEnd>
         <RunSim>0</RunSim>
         <RunTarget>1</RunTarget>
@@ -73,7 +73,7 @@
         <LExpSel>0</LExpSel>
       </OPTXL>
       <OPTFL>
-        <tvExp>0</tvExp>
+        <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
         <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
@@ -449,10 +449,6 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -478,18 +474,14 @@
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
-      <WatchWindow1>
-        <Ww>
-          <count>0</count>
+      <MemoryWindow1>
+        <Mm>
           <WinNumber>1</WinNumber>
-          <ItemText>machine</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>ui_text_fmt_buf</ItemText>
-        </Ww>
-      </WatchWindow1>
+          <SubType>0</SubType>
+          <ItemText>\\OrionPlus_D\Sources/Graphics/lvgl/src/lv_themes/lv_theme_light.c\styles-&gt;bg.map</ItemText>
+          <AccSizeX>0</AccSizeX>
+        </Mm>
+      </MemoryWindow1>
       <ScvdList>
         <Filename>..\..\..\..\Keil_v5\ARM\PACK\ARM\CMSIS-FreeRTOS\10.3.1\CMSIS\RTOS2\FreeRTOS\FreeRTOS.scvd</Filename>
         <Type></Type>
@@ -848,18 +840,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\App\Src\ControlBar.cpp</PathWithFileName>
-      <FilenameWithoutPath>ControlBar.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>24</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>.\Sources\App\Src\PageManager.cpp</PathWithFileName>
       <FilenameWithoutPath>PageManager.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -867,7 +847,7 @@
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>25</FileNumber>
+      <FileNumber>24</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -879,7 +859,7 @@
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>26</FileNumber>
+      <FileNumber>25</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -891,7 +871,7 @@
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>27</FileNumber>
+      <FileNumber>26</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -911,7 +891,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>28</FileNumber>
+      <FileNumber>27</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -923,7 +903,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>29</FileNumber>
+      <FileNumber>28</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -935,7 +915,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>30</FileNumber>
+      <FileNumber>29</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -947,7 +927,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>31</FileNumber>
+      <FileNumber>30</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -959,7 +939,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>32</FileNumber>
+      <FileNumber>31</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -979,7 +959,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>33</FileNumber>
+      <FileNumber>32</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -991,7 +971,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>34</FileNumber>
+      <FileNumber>33</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1003,7 +983,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>35</FileNumber>
+      <FileNumber>34</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1015,7 +995,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>36</FileNumber>
+      <FileNumber>35</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1027,7 +1007,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>37</FileNumber>
+      <FileNumber>36</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1047,7 +1027,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>38</FileNumber>
+      <FileNumber>37</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1059,7 +1039,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>39</FileNumber>
+      <FileNumber>38</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1071,7 +1051,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>40</FileNumber>
+      <FileNumber>39</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1083,7 +1063,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>41</FileNumber>
+      <FileNumber>40</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1095,7 +1075,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>42</FileNumber>
+      <FileNumber>41</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1107,7 +1087,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>43</FileNumber>
+      <FileNumber>42</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1119,7 +1099,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>44</FileNumber>
+      <FileNumber>43</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1131,7 +1111,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>45</FileNumber>
+      <FileNumber>44</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1143,7 +1123,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>46</FileNumber>
+      <FileNumber>45</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1155,7 +1135,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>47</FileNumber>
+      <FileNumber>46</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1167,7 +1147,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>48</FileNumber>
+      <FileNumber>47</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1179,7 +1159,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>49</FileNumber>
+      <FileNumber>48</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1191,7 +1171,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>50</FileNumber>
+      <FileNumber>49</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1203,7 +1183,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>51</FileNumber>
+      <FileNumber>50</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1215,7 +1195,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>52</FileNumber>
+      <FileNumber>51</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1227,7 +1207,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>53</FileNumber>
+      <FileNumber>52</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1239,7 +1219,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>54</FileNumber>
+      <FileNumber>53</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1251,7 +1231,7 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>55</FileNumber>
+      <FileNumber>54</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1271,7 +1251,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>56</FileNumber>
+      <FileNumber>55</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1283,7 +1263,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>57</FileNumber>
+      <FileNumber>56</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1295,7 +1275,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>58</FileNumber>
+      <FileNumber>57</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1307,7 +1287,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>59</FileNumber>
+      <FileNumber>58</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1319,7 +1299,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>60</FileNumber>
+      <FileNumber>59</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1331,7 +1311,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>61</FileNumber>
+      <FileNumber>60</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1343,7 +1323,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>62</FileNumber>
+      <FileNumber>61</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1355,7 +1335,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>63</FileNumber>
+      <FileNumber>62</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1367,7 +1347,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>64</FileNumber>
+      <FileNumber>63</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1379,7 +1359,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>65</FileNumber>
+      <FileNumber>64</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1399,7 +1379,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>66</FileNumber>
+      <FileNumber>65</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1411,7 +1391,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>67</FileNumber>
+      <FileNumber>66</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1423,7 +1403,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>68</FileNumber>
+      <FileNumber>67</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1435,7 +1415,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>69</FileNumber>
+      <FileNumber>68</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1447,7 +1427,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>70</FileNumber>
+      <FileNumber>69</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1459,7 +1439,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>71</FileNumber>
+      <FileNumber>70</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1471,7 +1451,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>72</FileNumber>
+      <FileNumber>71</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1483,7 +1463,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>73</FileNumber>
+      <FileNumber>72</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1495,7 +1475,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>74</FileNumber>
+      <FileNumber>73</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1507,7 +1487,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>75</FileNumber>
+      <FileNumber>74</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1519,7 +1499,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>76</FileNumber>
+      <FileNumber>75</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1531,7 +1511,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>77</FileNumber>
+      <FileNumber>76</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1543,7 +1523,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>78</FileNumber>
+      <FileNumber>77</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1555,7 +1535,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>79</FileNumber>
+      <FileNumber>78</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1567,7 +1547,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>80</FileNumber>
+      <FileNumber>79</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1581,25 +1561,13 @@
 
   <Group>
     <GroupName>LittleVGL_Core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>81</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_core\lv_debug.c</PathWithFileName>
-      <FilenameWithoutPath>lv_debug.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>82</FileNumber>
+      <FileNumber>80</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1611,7 +1579,7 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>83</FileNumber>
+      <FileNumber>81</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1623,7 +1591,7 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>84</FileNumber>
+      <FileNumber>82</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1635,7 +1603,7 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>85</FileNumber>
+      <FileNumber>83</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1647,7 +1615,7 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>86</FileNumber>
+      <FileNumber>84</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1659,7 +1627,7 @@
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
-      <FileNumber>87</FileNumber>
+      <FileNumber>85</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1679,7 +1647,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>88</FileNumber>
+      <FileNumber>86</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1691,7 +1659,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>89</FileNumber>
+      <FileNumber>87</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1703,7 +1671,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>90</FileNumber>
+      <FileNumber>88</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1723,7 +1691,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>91</FileNumber>
+      <FileNumber>89</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1735,7 +1703,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>92</FileNumber>
+      <FileNumber>90</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1747,7 +1715,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>93</FileNumber>
+      <FileNumber>91</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1759,7 +1727,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>94</FileNumber>
+      <FileNumber>92</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1771,19 +1739,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>95</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_misc\lv_circ.c</PathWithFileName>
-      <FilenameWithoutPath>lv_circ.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>12</GroupNumber>
-      <FileNumber>96</FileNumber>
+      <FileNumber>93</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1795,7 +1751,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>97</FileNumber>
+      <FileNumber>94</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1807,7 +1763,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>98</FileNumber>
+      <FileNumber>95</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1819,7 +1775,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>99</FileNumber>
+      <FileNumber>96</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1831,7 +1787,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>100</FileNumber>
+      <FileNumber>97</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1843,7 +1799,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>101</FileNumber>
+      <FileNumber>98</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1855,7 +1811,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>102</FileNumber>
+      <FileNumber>99</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1867,7 +1823,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>103</FileNumber>
+      <FileNumber>100</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1879,7 +1835,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>104</FileNumber>
+      <FileNumber>101</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1891,7 +1847,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>105</FileNumber>
+      <FileNumber>102</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1903,7 +1859,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>106</FileNumber>
+      <FileNumber>103</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1915,13 +1871,37 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>107</FileNumber>
+      <FileNumber>104</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_misc\lv_utils.c</PathWithFileName>
       <FilenameWithoutPath>lv_utils.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>12</GroupNumber>
+      <FileNumber>105</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_misc\lv_debug.c</PathWithFileName>
+      <FilenameWithoutPath>lv_debug.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>12</GroupNumber>
+      <FileNumber>106</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_misc\lv_txt_ap.c</PathWithFileName>
+      <FilenameWithoutPath>lv_txt_ap.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1935,19 +1915,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>108</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_draw\lv_draw.c</PathWithFileName>
-      <FilenameWithoutPath>lv_draw.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>13</GroupNumber>
-      <FileNumber>109</FileNumber>
+      <FileNumber>107</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1959,19 +1927,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>110</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_draw\lv_draw_basic.c</PathWithFileName>
-      <FilenameWithoutPath>lv_draw_basic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>13</GroupNumber>
-      <FileNumber>111</FileNumber>
+      <FileNumber>108</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1983,7 +1939,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>112</FileNumber>
+      <FileNumber>109</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1995,7 +1951,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>113</FileNumber>
+      <FileNumber>110</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2007,7 +1963,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>114</FileNumber>
+      <FileNumber>111</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2019,7 +1975,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>115</FileNumber>
+      <FileNumber>112</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2031,7 +1987,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>116</FileNumber>
+      <FileNumber>113</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2043,13 +1999,49 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>117</FileNumber>
+      <FileNumber>114</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_draw\lv_img_decoder.c</PathWithFileName>
       <FilenameWithoutPath>lv_img_decoder.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>13</GroupNumber>
+      <FileNumber>115</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_draw\lv_draw_blend.c</PathWithFileName>
+      <FilenameWithoutPath>lv_draw_blend.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>13</GroupNumber>
+      <FileNumber>116</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_draw\lv_draw_mask.c</PathWithFileName>
+      <FilenameWithoutPath>lv_draw_mask.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>13</GroupNumber>
+      <FileNumber>117</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_draw\lv_img_buf.c</PathWithFileName>
+      <FilenameWithoutPath>lv_img_buf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2092,8 +2084,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_roboto_12.c</PathWithFileName>
-      <FilenameWithoutPath>lv_font_roboto_12.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_unscii_8.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_unscii_8.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2104,8 +2096,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_roboto_12_subpx.c</PathWithFileName>
-      <FilenameWithoutPath>lv_font_roboto_12_subpx.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_dejavu_16_persian_hebrew.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_dejavu_16_persian_hebrew.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2116,8 +2108,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_roboto_16.c</PathWithFileName>
-      <FilenameWithoutPath>lv_font_roboto_16.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_loader.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_loader.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2128,8 +2120,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_roboto_22.c</PathWithFileName>
-      <FilenameWithoutPath>lv_font_roboto_22.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_8.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_8.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2140,8 +2132,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_roboto_28.c</PathWithFileName>
-      <FilenameWithoutPath>lv_font_roboto_28.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_10.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_10.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2152,8 +2144,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_roboto_28_compressed.c</PathWithFileName>
-      <FilenameWithoutPath>lv_font_roboto_28_compressed.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_12.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_12.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2164,259 +2156,259 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_unscii_8.c</PathWithFileName>
-      <FilenameWithoutPath>lv_font_unscii_8.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_12_subpx.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_12_subpx.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>127</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_14.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_14.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>128</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_16.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_16.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>129</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_18.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_18.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>130</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_20.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_20.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>131</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_22.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_22.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>132</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_24.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_24.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>133</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_26.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_26.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>134</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_28.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_28.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>135</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_28_compressed.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_28_compressed.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>136</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_30.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_30.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>137</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_32.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_32.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>138</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_34.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_34.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>139</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_36.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_36.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>140</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_38.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_38.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>141</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_40.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_40.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>142</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_42.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_42.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>143</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_44.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_44.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>144</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_46.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_46.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>145</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_montserrat_48.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_montserrat_48.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>146</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_font\lv_font_simsun_16_cjk.c</PathWithFileName>
+      <FilenameWithoutPath>lv_font_simsun_16_cjk.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
-    <GroupName>LittleVGL_ObjX</GroupName>
+    <GroupName>LittleVGL_Widgets</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>127</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_arc.c</PathWithFileName>
-      <FilenameWithoutPath>lv_arc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>128</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_bar.c</PathWithFileName>
-      <FilenameWithoutPath>lv_bar.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>129</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_btn.c</PathWithFileName>
-      <FilenameWithoutPath>lv_btn.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>130</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_btnm.c</PathWithFileName>
-      <FilenameWithoutPath>lv_btnm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>131</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_calendar.c</PathWithFileName>
-      <FilenameWithoutPath>lv_calendar.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>132</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_canvas.c</PathWithFileName>
-      <FilenameWithoutPath>lv_canvas.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>133</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_cb.c</PathWithFileName>
-      <FilenameWithoutPath>lv_cb.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>134</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_chart.c</PathWithFileName>
-      <FilenameWithoutPath>lv_chart.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>135</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_cont.c</PathWithFileName>
-      <FilenameWithoutPath>lv_cont.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>136</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_cpicker.c</PathWithFileName>
-      <FilenameWithoutPath>lv_cpicker.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>137</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_ddlist.c</PathWithFileName>
-      <FilenameWithoutPath>lv_ddlist.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>138</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_gauge.c</PathWithFileName>
-      <FilenameWithoutPath>lv_gauge.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>139</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_img.c</PathWithFileName>
-      <FilenameWithoutPath>lv_img.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>140</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_imgbtn.c</PathWithFileName>
-      <FilenameWithoutPath>lv_imgbtn.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>141</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_kb.c</PathWithFileName>
-      <FilenameWithoutPath>lv_kb.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>142</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_label.c</PathWithFileName>
-      <FilenameWithoutPath>lv_label.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>143</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_led.c</PathWithFileName>
-      <FilenameWithoutPath>lv_led.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>144</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_line.c</PathWithFileName>
-      <FilenameWithoutPath>lv_line.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>145</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_list.c</PathWithFileName>
-      <FilenameWithoutPath>lv_list.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>146</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_lmeter.c</PathWithFileName>
-      <FilenameWithoutPath>lv_lmeter.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
     <File>
       <GroupNumber>15</GroupNumber>
       <FileNumber>147</FileNumber>
@@ -2424,8 +2416,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_mbox.c</PathWithFileName>
-      <FilenameWithoutPath>lv_mbox.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_arc.c</PathWithFileName>
+      <FilenameWithoutPath>lv_arc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2436,8 +2428,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_objx_templ.c</PathWithFileName>
-      <FilenameWithoutPath>lv_objx_templ.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_bar.c</PathWithFileName>
+      <FilenameWithoutPath>lv_bar.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2448,8 +2440,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_page.c</PathWithFileName>
-      <FilenameWithoutPath>lv_page.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_btn.c</PathWithFileName>
+      <FilenameWithoutPath>lv_btn.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2460,8 +2452,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_preload.c</PathWithFileName>
-      <FilenameWithoutPath>lv_preload.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_btnmatrix.c</PathWithFileName>
+      <FilenameWithoutPath>lv_btnmatrix.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2472,8 +2464,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_roller.c</PathWithFileName>
-      <FilenameWithoutPath>lv_roller.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_calendar.c</PathWithFileName>
+      <FilenameWithoutPath>lv_calendar.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2484,8 +2476,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_slider.c</PathWithFileName>
-      <FilenameWithoutPath>lv_slider.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_canvas.c</PathWithFileName>
+      <FilenameWithoutPath>lv_canvas.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2496,8 +2488,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_spinbox.c</PathWithFileName>
-      <FilenameWithoutPath>lv_spinbox.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_chart.c</PathWithFileName>
+      <FilenameWithoutPath>lv_chart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2508,8 +2500,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_sw.c</PathWithFileName>
-      <FilenameWithoutPath>lv_sw.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_checkbox.c</PathWithFileName>
+      <FilenameWithoutPath>lv_checkbox.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2520,8 +2512,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_ta.c</PathWithFileName>
-      <FilenameWithoutPath>lv_ta.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_cont.c</PathWithFileName>
+      <FilenameWithoutPath>lv_cont.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2532,8 +2524,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_table.c</PathWithFileName>
-      <FilenameWithoutPath>lv_table.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_cpicker.c</PathWithFileName>
+      <FilenameWithoutPath>lv_cpicker.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2544,8 +2536,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_tabview.c</PathWithFileName>
-      <FilenameWithoutPath>lv_tabview.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_dropdown.c</PathWithFileName>
+      <FilenameWithoutPath>lv_dropdown.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2556,8 +2548,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_tileview.c</PathWithFileName>
-      <FilenameWithoutPath>lv_tileview.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_gauge.c</PathWithFileName>
+      <FilenameWithoutPath>lv_gauge.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2568,7 +2560,259 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_objx\lv_win.c</PathWithFileName>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_img.c</PathWithFileName>
+      <FilenameWithoutPath>lv_img.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>160</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_imgbtn.c</PathWithFileName>
+      <FilenameWithoutPath>lv_imgbtn.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>161</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_keyboard.c</PathWithFileName>
+      <FilenameWithoutPath>lv_keyboard.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>162</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_label.c</PathWithFileName>
+      <FilenameWithoutPath>lv_label.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>163</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_led.c</PathWithFileName>
+      <FilenameWithoutPath>lv_led.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>164</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_line.c</PathWithFileName>
+      <FilenameWithoutPath>lv_line.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>165</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_linemeter.c</PathWithFileName>
+      <FilenameWithoutPath>lv_linemeter.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>166</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_list.c</PathWithFileName>
+      <FilenameWithoutPath>lv_list.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>167</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_msgbox.c</PathWithFileName>
+      <FilenameWithoutPath>lv_msgbox.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>168</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_objmask.c</PathWithFileName>
+      <FilenameWithoutPath>lv_objmask.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>169</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_objx_templ.c</PathWithFileName>
+      <FilenameWithoutPath>lv_objx_templ.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>170</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_page.c</PathWithFileName>
+      <FilenameWithoutPath>lv_page.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>171</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_roller.c</PathWithFileName>
+      <FilenameWithoutPath>lv_roller.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>172</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_slider.c</PathWithFileName>
+      <FilenameWithoutPath>lv_slider.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>173</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_spinbox.c</PathWithFileName>
+      <FilenameWithoutPath>lv_spinbox.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>174</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_spinner.c</PathWithFileName>
+      <FilenameWithoutPath>lv_spinner.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>175</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_switch.c</PathWithFileName>
+      <FilenameWithoutPath>lv_switch.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>176</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_table.c</PathWithFileName>
+      <FilenameWithoutPath>lv_table.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>177</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_tabview.c</PathWithFileName>
+      <FilenameWithoutPath>lv_tabview.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>178</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_textarea.c</PathWithFileName>
+      <FilenameWithoutPath>lv_textarea.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>179</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_tileview.c</PathWithFileName>
+      <FilenameWithoutPath>lv_tileview.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>180</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_widgets\lv_win.c</PathWithFileName>
       <FilenameWithoutPath>lv_win.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2583,7 +2827,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>16</GroupNumber>
-      <FileNumber>160</FileNumber>
+      <FileNumber>181</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2595,13 +2839,25 @@
     </File>
     <File>
       <GroupNumber>16</GroupNumber>
-      <FileNumber>161</FileNumber>
+      <FileNumber>182</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_themes\lv_theme_default.c</PathWithFileName>
-      <FilenameWithoutPath>lv_theme_default.c</FilenameWithoutPath>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_themes\lv_theme_empty.c</PathWithFileName>
+      <FilenameWithoutPath>lv_theme_empty.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>16</GroupNumber>
+      <FileNumber>183</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Sources\Graphics\lvgl\src\lv_themes\lv_theme_material.c</PathWithFileName>
+      <FilenameWithoutPath>lv_theme_material.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2615,7 +2871,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>17</GroupNumber>
-      <FileNumber>162</FileNumber>
+      <FileNumber>184</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2627,7 +2883,7 @@
     </File>
     <File>
       <GroupNumber>17</GroupNumber>
-      <FileNumber>163</FileNumber>
+      <FileNumber>185</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -2649,7 +2905,7 @@
 
   <Group>
     <GroupName>::Device</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>1</RteFlg>
