@@ -528,6 +528,11 @@
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\pages\FileManagerPage.cpp</FilePath>
             </File>
+            <File>
+              <FileName>SettingsPage.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\pages\SettingsPage.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2073,6 +2078,11 @@
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\pages\FileManagerPage.cpp</FilePath>
             </File>
+            <File>
+              <FileName>SettingsPage.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\pages\SettingsPage.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3617,6 +3627,11 @@
               <FileName>FileManagerPage.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Sources\App\Src\pages\FileManagerPage.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SettingsPage.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Sources\App\Src\pages\SettingsPage.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -12,10 +12,6 @@
 
 #include "../lv_misc/lv_gc.h"
 
-#if defined(LV_GC_INCLUDE)
-    #include LV_GC_INCLUDE
-#endif /* LV_ENABLE_GC */
-
 /*********************
  *      DEFINES
  *********************/
@@ -56,7 +52,6 @@ static bool inited;
  *   STATIC FUNCTIONS
  **********************/
 static void style_init_reset(lv_style_t * style);
-
 
 static void basic_init(void)
 {
@@ -131,14 +126,12 @@ static void btn_init(void)
 #endif
 }
 
-
 static void btnmatrix_init(void)
 {
 #if LV_USE_BTNMATRIX
 
 #endif
 }
-
 
 static void calendar_init(void)
 {
@@ -154,7 +147,6 @@ static void chart_init(void)
 #endif
 }
 
-
 static void cpicker_init(void)
 {
 #if LV_USE_CPICKER
@@ -169,14 +161,12 @@ static void checkbox_init(void)
 #endif
 }
 
-
 static void cont_init(void)
 {
 #if LV_USE_CONT != 0
 
 #endif
 }
-
 
 static void gauge_init(void)
 {
@@ -198,7 +188,6 @@ static void label_init(void)
 
 #endif
 }
-
 
 static void linemeter_init(void)
 {
@@ -242,14 +231,12 @@ static void switch_init(void)
 #endif
 }
 
-
 static void spinbox_init(void)
 {
 #if LV_USE_SPINBOX
 
 #endif
 }
-
 
 static void spinner_init(void)
 {
@@ -327,7 +314,6 @@ static void win_init(void)
 #endif
 }
 
-
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
@@ -352,13 +338,8 @@ lv_theme_t * lv_theme_template_init(lv_color_t color_primary, lv_color_t color_s
      * styles' data if LVGL is used in a binding (e.g. Micropython)
      * In a general case styles could be simple `static lv_style_t my style` variables or allocated directly into `styles`*/
     if(!inited) {
-#if defined(LV_GC_INCLUDE)
         LV_GC_ROOT(_lv_theme_template_styles) = lv_mem_alloc(sizeof(theme_styles_t));
         styles = (theme_styles_t *)LV_GC_ROOT(_lv_theme_template_styles);
-#else
-        styles = lv_mem_alloc(sizeof(theme_styles_t));
-#endif
-
     }
 
     theme.color_primary = color_primary;
@@ -406,7 +387,6 @@ lv_theme_t * lv_theme_template_init(lv_color_t color_primary, lv_color_t color_s
 
     return &theme;
 }
-
 
 void theme_apply(lv_theme_t * th, lv_obj_t * obj, lv_theme_style_t name)
 {
@@ -618,7 +598,7 @@ void theme_apply(lv_theme_t * th, lv_obj_t * obj, lv_theme_style_t name)
             list = lv_obj_get_style_list(obj, LV_TABVIEW_PART_BG);
             _lv_style_list_add_style(list, &styles->bg);
 
-            list = lv_obj_get_style_list(obj, LV_TABVIEW_PART_BG_SCRLLABLE);
+            list = lv_obj_get_style_list(obj, LV_TABVIEW_PART_BG_SCROLLABLE);
             _lv_style_list_add_style(list, &styles->bg);
             _lv_style_list_add_style(list, &styles->color);
 
@@ -658,7 +638,6 @@ void theme_apply(lv_theme_t * th, lv_obj_t * obj, lv_theme_style_t name)
             break;
 #endif
 
-
 #if LV_USE_ROLLER
         case LV_THEME_ROLLER:
             list = lv_obj_get_style_list(obj, LV_ROLLER_PART_BG);
@@ -669,7 +648,6 @@ void theme_apply(lv_theme_t * th, lv_obj_t * obj, lv_theme_style_t name)
             _lv_style_list_add_style(list, &styles->color);
             break;
 #endif
-
 
 #if LV_USE_OBJMASK
         case LV_THEME_OBJMASK:
@@ -727,21 +705,20 @@ void theme_apply(lv_theme_t * th, lv_obj_t * obj, lv_theme_style_t name)
             break;
 #endif
 #if LV_USE_TABLE
-        case LV_THEME_TABLE:
-        {
-            list = lv_obj_get_style_list(obj, LV_TABLE_PART_BG);
-            _lv_style_list_add_style(list, &styles->bg);
+        case LV_THEME_TABLE: {
+                list = lv_obj_get_style_list(obj, LV_TABLE_PART_BG);
+                _lv_style_list_add_style(list, &styles->bg);
 
-            int idx = 1; /* start value should be 1, not zero, since cell styles
+                int idx = 1; /* start value should be 1, not zero, since cell styles
                             start at 1 due to presence of LV_TABLE_PART_BG=0
                             in the enum (lv_table.h) */
-                         /* declaring idx outside loop to work with older compilers */
-            for (; idx <= LV_TABLE_CELL_STYLE_CNT; idx ++ ) {
-              list = lv_obj_get_style_list(obj, idx);
-              _lv_style_list_add_style(list, &styles->bg);
+                /* declaring idx outside loop to work with older compilers */
+                for(; idx <= LV_TABLE_CELL_STYLE_CNT; idx ++) {
+                    list = lv_obj_get_style_list(obj, idx);
+                    _lv_style_list_add_style(list, &styles->bg);
+                }
+                break;
             }
-            break;
-         }
 #endif
 
 #if LV_USE_WIN
@@ -782,7 +759,6 @@ void theme_apply(lv_theme_t * th, lv_obj_t * obj, lv_theme_style_t name)
             _lv_style_list_add_style(list, &styles->bg);
             break;
 #endif
-
 
 #if LV_USE_SPINBOX
         case LV_THEME_SPINBOX:
