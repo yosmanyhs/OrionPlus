@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include "lvgl.h"
 
-
 class BasePageWindow
 {
 public:
@@ -13,6 +12,9 @@ public:
 
 protected:
     lv_obj_t * m_page_handle;
+
+    static void event_router_proc(struct _lv_obj_t * obj, lv_event_t evt);
+    virtual void page_event_handler(struct _lv_obj_t * obj, lv_event_t evt) = 0;
 };
 
 #endif

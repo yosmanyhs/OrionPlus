@@ -13,7 +13,7 @@
 #include "ui_task.h"
 #include "settings_manager.h"
 #include "ui_identifiers.h"
-//#include "page_manager.h"
+
 
 #include "user_tasks.h"
 
@@ -22,6 +22,8 @@
 #include "lvgl.h"
 
 #include "PageManager.h"
+#include "MainPage.h"
+#include "SettingsPage.h"
 
 #include "DataConverter.h"
 #include "MachineCore.h"
@@ -34,10 +36,12 @@ static char ui_text_fmt_buf[64];
 
 //////////////////////////////////////////////////////////////////////
 
-static bool create_main_page_controls(lv_obj_t* parent);
+#ifdef SAVED_FOR_LATER
 static void ui_refresh_timer_callback(TimerHandle_t xTimer);
 
 static void format_coords_to_string(const char* prefix, const char* sufix, char* buffer, const float* coords, uint32_t coord_cnt);
+#endif
+
 //////////////////////////////////////////////////////////////////////
 
 static void UI_MainTask_Entry(void * pvParam);
@@ -65,11 +69,13 @@ void UI_MainTask_Entry(void * pvParam)
     memset(&ui_text_fmt_buf, 0, sizeof(ui_text_fmt_buf));    
     
     // Create Main Page User Interface controls
-    create_main_page_controls(lv_scr_act());
+    SettingsPage mp;
+    
+    mp.Create(lv_scr_act());
     
     // Create data refresh timer
-    TimerHandle_t timer = xTimerCreate(NULL, 500, pdTRUE, NULL, (TimerCallbackFunction_t)ui_refresh_timer_callback);
-    xTimerStart(timer, 0);
+    //TimerHandle_t timer = xTimerCreate(NULL, 500, pdTRUE, NULL, (TimerCallbackFunction_t)ui_refresh_timer_callback);
+    //xTimerStart(timer, 0);
     
     for ( ; ; )
     {
@@ -79,33 +85,8 @@ void UI_MainTask_Entry(void * pvParam)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifdef SAVED_FOR_LATER
 
-enum STATUS_LABEL_ID_VALUES
-{
-	STAT_SYSSTATE_ID,			// Current system status (Homing, Halted, Probing, ...)
-
-	STAT_FEEDRATE_LABEL_ID,	// Static text "Feed Rate"
-	STAT_SPINDLE_LABEL_ID,	// Static text "Spindle"
-
-	STAT_CURRENT_FEEDRATE_ID,	// Current feedrate value [units/min] | min-1
-	STAT_CURRENT_RPM_ID,		// Current rpm of spindle [rpm]
-
-	STAT_PLAYED_FILE_ID,	// File name of active SD file being played
-
-	STAT_WIDGET_COUNT
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-static lv_obj_t* feedrate_gauge;
-static lv_obj_t* spindle_gauge;
-
-static lv_obj_t* task_progress_bar;
-
-static lv_obj_t* status_labels[STAT_WIDGET_COUNT];
-
-static lv_obj_t * coord_table;
-static lv_obj_t * status_tables[2];
 static lv_obj_t * status_leds[3];
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,7 +237,7 @@ static void ui_refresh_timer_callback(TimerHandle_t xTimer)
             fixedText = UI_MACH_READY;
     }
     
-    lv_label_set_static_text(status_labels[STAT_SYSSTATE_ID], fixedText);
+    //lv_label_set_static_text(status_labels[STAT_SYSSTATE_ID], fixedText);
     
     // Coordinate Origin
     //format_coords_to_string(UI_PREFIX_ORIGIN, UI_SUFIX_COORDS, ui_text_fmt_buf, ui_status_data.OriginCoordinates, 3);
@@ -313,218 +294,6 @@ void format_coords_to_string(const char* prefix, const char* sufix, char* buffer
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void main_page_button_click_handler(struct _lv_obj_t * btn, lv_event_t evt);
-static void main_page_label_click_handler(struct _lv_obj_t * lbl, lv_event_t evt);
-
-///////////////////////////////////////////////////////////////////////////////
-
-typedef enum ACTION_BUTTON_ID_VALUES
-{
-	// first row
-    BTN_CYCLE_START,
-    BTN_CYCLE_HOLD,
-    BTN_CYCLE_ABORT,
-    BTN_POWEROFF,
-
-    // second row
-    BTN_SAVE_TO_G10, 
-    BTN_SAVE_TO_G92,
-    BTN_NOTIFICATIONS,
-    BTN_SETTINGS,
-
-    // third row
-    BTN_GO_HOME,
-    BTN_DO_PROBE,
-    BTN_JOG,
-    BTN_FILEMGR,
-
-    BTN_MAX
-}ACTION_BUTTON_ID_VALUES;
-
-static const char* btn_texts[BTN_MAX] =
-{
-	LV_SYMBOL_PLAY "\nStart",
-    LV_SYMBOL_PAUSE "\nHold",
-    LV_SYMBOL_STOP "\nAbort",
-    LV_SYMBOL_POWER "\nSleep",
-
-    LV_SYMBOL_SAVE "\n>G10",
-    LV_SYMBOL_SAVE "\n>G92",
-    LV_SYMBOL_BELL "\nAlerts",
-    LV_SYMBOL_SETTINGS "\nSetup",
-    
-    LV_SYMBOL_HOME "\nHome",
-    LV_SYMBOL_DOWNLOAD "\nProbe",
-    LV_SYMBOL_KEYBOARD "\nJog",
-    LV_SYMBOL_DIRECTORY "\nFiles",
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-const char* initial_status_texts[STAT_WIDGET_COUNT] =
-{
-    "Ready",	// The current system status [Ready/Homing/Probing/Halted]
-
-    "Feed Rate",
-    "Spindle",
-
-    "0 mm/min",
-    "0 rpm",
-
-    ""	// Will be empty by default
-};
-
-static lv_point_t lbl_coords[STAT_WIDGET_COUNT] =
-{
-    { 8, 450 },		// Ready/status
-
-    { 70, 265 },	// FeedRate label	{ 385, 250, 0, 0 }
-    { 300, 265 },	// Spindle Label	{ 540, 250, 0, 0 }
-    
-    { 45, 410 },  // Feedrate value
-    { 270, 410 },  // Spindle rpms
-    
-    { 150, 450 },		// File name
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-static void create_coord_table(lv_obj_t* parent)
-{
-    coord_table = lv_table_create(parent, NULL);
-
-    int table_width = 800 - 80 * 4 - 8 * 4;
-    
-    lv_table_set_col_cnt(coord_table, 4);
-    lv_table_set_row_cnt(coord_table, 5);
-
-    for (int c = 0; c < 4; c++)
-        lv_table_set_col_width(coord_table, c, (table_width - 20) / 4);
-
-    const char * col_headings[] = { LV_SYMBOL_LIST, "X", "Y", "Z" };
-    const char * row_headings[] = { "Origin", "Offset", "Probe", "Active" };
-
-    for (size_t i = 0; i < 4; i++)
-    {
-        lv_table_set_cell_value(coord_table, 0, i, col_headings[i]);
-        lv_table_set_cell_align(coord_table, 0, i, LV_LABEL_ALIGN_CENTER);
-    }
-
-    for (size_t k = 0; k < 4; k++)
-    {
-        lv_table_set_cell_value(coord_table, k + 1, 0, row_headings[k]);
-        lv_table_set_cell_align(coord_table, k + 1, 0, LV_LABEL_ALIGN_CENTER);
-    }
-
-    for (size_t h = 1; h < 4; h++)
-    {
-        for (size_t w = 1; w < 5; w++)
-        {
-            lv_table_set_cell_value(coord_table, w, h, "0.0000");
-            lv_table_set_cell_align(coord_table, w, h, LV_LABEL_ALIGN_CENTER);
-        }
-    }
-    
-    lv_obj_set_style_local_bg_opa(coord_table, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
-    lv_obj_set_style_local_border_opa(coord_table, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
-
-    lv_obj_set_style_local_pad_top(coord_table, LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_bottom(coord_table, LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_left(coord_table, LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_right(coord_table, LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-
-    
-    lv_obj_set_size(coord_table, table_width, 220);
-    lv_obj_set_pos(coord_table, 0, 70);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void create_status_tables(lv_obj_t* parent)
-{
-    status_tables[0] = lv_table_create(parent, NULL);
-
-    int table_width = 800 - 80 * 4 - 8 * 6;
-
-    lv_table_set_col_cnt(status_tables[0], 6);
-    lv_table_set_row_cnt(status_tables[0], 1);
-
-    int widths[] = { 60, 65, 45, 80, 80, 100 };
-
-    for (int c = 0; c < 6; c++)
-    {
-        lv_table_set_col_width(status_tables[0], c, widths[c]);
-    }
-    
-    lv_obj_set_style_local_bg_opa(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
-    lv_obj_set_style_local_border_opa(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
-    lv_obj_set_style_local_border_opa(status_tables[0], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, LV_OPA_TRANSP);
-
-    lv_obj_set_style_local_margin_top(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_margin_bottom(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_margin_left(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_left(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-
-    lv_obj_set_style_local_pad_top(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_bottom(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_left(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_right(status_tables[0], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-
-    lv_obj_set_style_local_pad_top(status_tables[0], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_bottom(status_tables[0], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_left(status_tables[0], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_right(status_tables[0], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-
-
-    // Initialization data
-    lv_table_set_cell_value(status_tables[0], 0, 0, "Abs");
-    lv_table_set_cell_value(status_tables[0], 0, 1, "mm");
-    lv_table_set_cell_value(status_tables[0], 0, 2, "XY");
-    lv_table_set_cell_value(status_tables[0], 0, 3, "G54");
-    lv_table_set_cell_value(status_tables[0], 0, 4, "");
-    lv_table_set_cell_value(status_tables[0], 0, 5, "");
-    
-    lv_obj_set_size(status_tables[0], table_width, 41);
-    lv_obj_set_pos(status_tables[0], 0, 0);
-
-    status_tables[1] = lv_table_create(parent, status_tables[0]);
-
-    lv_table_set_col_cnt(status_tables[1], 4);
-    lv_table_set_row_cnt(status_tables[1], 1);
-
-    lv_table_set_col_width(status_tables[1], 0, 80);
-    lv_table_set_col_width(status_tables[1], 1, 110);
-    lv_table_set_col_width(status_tables[1], 2, 75);
-    lv_table_set_col_width(status_tables[1], 3, table_width - 80 - 110 - 75);
-
-    lv_obj_set_style_local_margin_top(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_margin_bottom(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_margin_left(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_left(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-
-    lv_obj_set_style_local_pad_top(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_bottom(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_left(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-    lv_obj_set_style_local_pad_right(status_tables[1], LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
-
-    lv_obj_set_style_local_pad_top(status_tables[1], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_bottom(status_tables[1], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_left(status_tables[1], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-    lv_obj_set_style_local_pad_right(status_tables[1], LV_TABLE_PART_CELL1, LV_STATE_DEFAULT, 6);
-
-    // Initialization data
-    lv_table_set_cell_value(status_tables[1], 0, 0, "Dry");
-    lv_table_set_cell_value(status_tables[1], 0, 1, "No Tool");
-    lv_table_set_cell_value(status_tables[1], 0, 2, "Stop");
-    lv_table_set_cell_value(status_tables[1], 0, 3, "");
-
-    lv_obj_set_size(status_tables[1], table_width, 30);
-    lv_obj_set_pos(status_tables[1], 0, 40);
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void create_status_leds(lv_obj_t* parent)
 {
     lv_obj_t* box;
@@ -561,243 +330,5 @@ void create_status_leds(lv_obj_t* parent)
     lv_obj_set_pos(labels, 10, 60);
 }
 
+#endif // SAVED_FOR_LATER
 ///////////////////////////////////////////////////////////////////////////////
-
-bool create_main_page_controls(lv_obj_t* parent)
-{
-    lv_obj_t* btn;
-    int x, y;
-    int index;
-
-    // Create main page buttons
-    for (index = BTN_CYCLE_START; index < BTN_MAX; index++)
-    {
-        // Create the button
-        btn = lv_btn_create(parent, NULL);
-
-        // Create a child image and assign text/symbols at once
-        lv_img_set_src(lv_img_create(btn, NULL), (const void*)btn_texts[index]);
-
-        // Locate and resize buttons
-        x = 448 + 88 * (index % 4);
-        y = 8 + 88 * (index / 4);
-
-        lv_obj_set_pos(btn, x, y);
-        lv_obj_set_size(btn, 80, 80);
-        lv_obj_set_user_data(btn, (lv_obj_user_data_t)index);
-
-        lv_obj_set_event_cb(btn, main_page_button_click_handler);
-    }
-    
-    create_coord_table(parent);
-    create_status_tables(parent);
-    
-    // Create feedrate and spindle gauges
-    feedrate_gauge = lv_gauge_create(parent, NULL);
-
-    lv_obj_set_size(feedrate_gauge, 120, 120);
-    lv_obj_set_pos(feedrate_gauge, 60, 290);
-    _lv_obj_set_style_local_ptr(feedrate_gauge, LV_GAUGE_PART_MAIN, LV_STYLE_TEXT_FONT, &lv_font_montserrat_14);
-    lv_gauge_set_value(feedrate_gauge, 0, 0);
-
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAIN, LV_STYLE_PAD_TOP | LV_STATE_DEFAULT, 4);
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAIN, LV_STYLE_PAD_BOTTOM | LV_STATE_DEFAULT, 4);
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAIN, LV_STYLE_PAD_LEFT | LV_STATE_DEFAULT, 4);
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAIN, LV_STYLE_PAD_RIGHT | LV_STATE_DEFAULT, 4);
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAIN, LV_STYLE_PAD_INNER | LV_STATE_DEFAULT, 2);
-
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAJOR, LV_STYLE_LINE_WIDTH | LV_STATE_DEFAULT, 1);
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAJOR, LV_STYLE_SCALE_END_LINE_WIDTH | LV_STATE_DEFAULT, 2);
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_MAJOR, LV_STYLE_SCALE_END_BORDER_WIDTH | LV_STATE_DEFAULT, 1);
-
-    //_lv_obj_set_style_local_int(feedrate_gauge, LV_GAUGE_PART_NEEDLE, LV_STYLE_LINE_WIDTH | LV_STATE_DEFAULT, 3);
-    //_lv_obj_set_style_local_color(feedrate_gauge, LV_GAUGE_PART_NEEDLE, LV_STYLE_LINE_COLOR | LV_STATE_DEFAULT, lv_color_hex(0xFF0000));
-
-    spindle_gauge = lv_gauge_create(parent, feedrate_gauge);
-
-    lv_obj_set_pos(spindle_gauge, 270, 290);
-    lv_gauge_set_value(spindle_gauge, 0, 0);
-
-    // Create status LEDs
-    create_status_leds(parent);
-
-    // Create task progress bar
-    task_progress_bar = lv_bar_create(parent, NULL);
-
-    lv_obj_set_pos(task_progress_bar, 640, 452);
-    lv_obj_set_size(task_progress_bar, 150, 20);
-    
-    // Create all status labels
-    for (index = 0; index < STAT_WIDGET_COUNT; index++)
-    {
-        lv_obj_t* lbl = lv_label_create(parent, NULL);
-
-        lv_label_set_text(lbl, initial_status_texts[index]);
-        lv_obj_set_pos(lbl, lbl_coords[index].x, lbl_coords[index].y);
-        status_labels[index] = lbl;
-    }
-
-    lv_obj_set_style_local_text_font(status_labels[STAT_FEEDRATE_LABEL_ID], LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_montserrat_18);
-    lv_obj_set_style_local_text_font(status_labels[STAT_CURRENT_FEEDRATE_ID], LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_montserrat_18);
-    lv_obj_set_style_local_text_font(status_labels[STAT_SPINDLE_LABEL_ID], LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_montserrat_18);
-    lv_obj_set_style_local_text_font(status_labels[STAT_CURRENT_RPM_ID], LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_montserrat_18);
-
-    lv_label_set_long_mode(status_labels[STAT_CURRENT_FEEDRATE_ID], LV_LABEL_LONG_DOT);
-    lv_obj_set_width(status_labels[STAT_CURRENT_FEEDRATE_ID], 150);
-    lv_label_set_align(status_labels[STAT_CURRENT_FEEDRATE_ID], LV_LABEL_ALIGN_CENTER);
-
-    // rpms
-    lv_label_set_long_mode(status_labels[STAT_CURRENT_RPM_ID], LV_LABEL_LONG_DOT);
-    lv_obj_set_width(status_labels[STAT_CURRENT_RPM_ID], 120);
-    lv_label_set_align(status_labels[STAT_CURRENT_RPM_ID], LV_LABEL_ALIGN_CENTER);
-
-    return true;
-}
-
-
-static void main_page_button_click_handler(struct _lv_obj_t * btn, lv_event_t evt)
-{
-    static bool pwr_state = true;
-    
-	if (evt == LV_EVENT_RELEASED)
-	{
-		switch ((ACTION_BUTTON_ID_VALUES)btn->user_data)
-		{
-            case BTN_POWEROFF:
-            {
-                if (pwr_state == true)
-                {
-                    pwr_state = false;
-                    lv_port_disp_NT35510_set_backlight(0);
-                }
-                else
-                {
-                    pwr_state = true;
-                    lv_port_disp_NT35510_set_backlight(100);
-                }
-            }
-            break;
-
-            case BTN_SETTINGS:
-            {
-                static const char* msgs[] =
-                {
-                    "Abs", "Inc",
-                    "mm", "inch",
-                    "XY", "YZ", "ZX",
-                    "G54", "G55", "G56", "G57", "G58", "G59", "G59.1", "G59.2", "G59.3",
-                    "Dry", "Mist", "Flood",
-                    "Tool 1", "Tool 2", "Tool 3", "Tool 999", "No Tool",
-                    "Stop", "CW", "CCW",
-                    "Check Mode", ""
-                };
-
-                static int m = 0;
-
-                lv_table_set_cell_value(status_tables[0], 0, 0, msgs[(m % 2) + 0]);
-                lv_table_set_cell_value(status_tables[0], 0, 1, msgs[(m % 2) + 2]);
-                lv_table_set_cell_value(status_tables[0], 0, 2, msgs[(m % 3) + 4]);
-                lv_table_set_cell_value(status_tables[0], 0, 3, msgs[(m % 9) + 7]);
-
-                lv_table_set_cell_value(status_tables[1], 0, 0, msgs[(m % 3) + 16]);
-                lv_table_set_cell_value(status_tables[1], 0, 1, msgs[(m % 5) + 19]);
-                lv_table_set_cell_value(status_tables[1], 0, 2, msgs[(m % 3) + 24]);
-                lv_table_set_cell_value(status_tables[1], 0, 3, msgs[(m % 2) + 27]);
-                m++;
-            }
-            break;
-
-            case BTN_CYCLE_ABORT:
-                break;
-
-            case BTN_CYCLE_HOLD:
-                break;
-
-            case BTN_CYCLE_START:
-                break;
-
-            case BTN_FILEMGR:
-                break;
-
-            case BTN_SAVE_TO_G92:
-            {
-                const char* buf;
-
-                for (int i = 0; i < 3; i++)
-                {
-
-                    float f = (float)rand();
-
-                    if (f != 0)
-                        f = 1000 / f;
-
-                    buf = DataConverter::FloatToStringTruncate(f, 6);
-                    lv_table_set_cell_value(coord_table, 2, i + 1, buf);
-                }
-            }
-            break;
-
-            case BTN_SAVE_TO_G10:
-            {
-                const char* buf;
-
-                for (int i = 0; i < 3; i++)
-                {
-
-                    float f = (float)rand();
-
-                    if (f != 0)
-                        f = 1000 / f;
-
-                    buf = DataConverter::FloatToStringTruncate(f, 6);
-                    lv_table_set_cell_value(coord_table, 1, i + 1, buf);
-                }
-            }
-            break;
-
-            case BTN_JOG:
-                break;
-
-            case BTN_DO_PROBE:
-                break;
-
-            case BTN_GO_HOME:
-            {
-                const char *buf;
-
-                for (size_t i = 0; i < 3; i++)
-                {
-                    int r = rand() % 101;
-
-                    switch (i)
-                    {
-                        case 0:
-                        {
-                            lv_gauge_set_value(feedrate_gauge, 0, r);
-
-                            // feedrate max = 6000 <=> 100
-                            buf = DataConverter::IntegerToString(60 * r);
-                            lv_label_set_text(status_labels[STAT_CURRENT_FEEDRATE_ID], buf);
-                        }   
-                        break;
-
-                        case 1:
-                        {
-                            lv_gauge_set_value(spindle_gauge, 0, r);
-
-                            // spindle max = 10000 <=> 100
-                            buf = DataConverter::IntegerToString(100 * r);
-                            lv_label_set_text(status_labels[STAT_CURRENT_RPM_ID], buf);
-                        }
-                        break;
-                    }
-                }
-                
-                machine->GoHome(NULL, 0, true);
-            }
-            break;
-		}
-	}
-}
-
-
