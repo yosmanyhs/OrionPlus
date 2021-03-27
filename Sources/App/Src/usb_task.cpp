@@ -10,30 +10,56 @@
 #include "usb_task.h"
 #include "settings_manager.h"
 
+#include "tusb.h"
+#include "pins.h"
+
 TaskHandle_t usb_task_handle;
 
+static void usb_low_level_init(void);
+
+
 void USBTask_Entry(void * pvParam)
-{
-    // Initialize USB Stack [CDC Device]
+{   
+    /* Initialize USB low level components */
+    usb_low_level_init();
+    
+    /* Initialize USB Stack [CDC Device] */
+    tusb_init();
     
     // Wait for USB events (signaled from Interrupt to Task Notification)
     for ( ; ; )
     {
-         if (ulTaskNotifyTake(pdTRUE, portMAX_DELAY)!= 0)
-         {
-             NVIC_EnableIRQ(OTG_FS_IRQn);
-         }
+        /* This function never returns (unless fails wait on queue using portMAX_DELAY) */
+        tud_task();
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void OTG_FS_IRQHandler(void)
+static void usb_low_level_init(void)
 {
-    BaseType_t high_prio_task_woken = pdFALSE;
+    GPIO_InitTypeDef gpio;
     
-    xTaskNotifyFromISR(usb_task_handle, 1, eSetBits, &high_prio_task_woken);
-    NVIC_DisableIRQ(OTG_FS_IRQn);
+    /* Low level USB peripheral init (clocks, gpio, etc.) */
+    //__HAL_RCC_GPIOA_CLK_ENABLE();     /* Already done */
     
-    portYIELD_FROM_ISR(high_prio_task_woken);
+    gpio.Pin = USB_D_PLUS_Pin | USB_D_MINUS_Pin;
+    gpio.Mode = GPIO_MODE_AF_PP;
+    gpio.Pull = GPIO_NOPULL;
+    gpio.Speed = GPIO_SPEED_HIGH;
+    gpio.Alternate = GPIO_AF10_OTG_FS;
+    
+    HAL_GPIO_Init(GPIOA, &gpio);
+    
+    __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
+    HAL_NVIC_SetPriority(OTG_FS_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY, 0);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void OTG_FS_IRQHandler(void)
+{
+    tud_int_handler();
+}
+
+
