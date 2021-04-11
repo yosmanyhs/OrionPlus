@@ -116,17 +116,21 @@ uint16_t const* tud_descriptor_string_cb(uint8_t index, uint16_t langid);
 __attribute__ ((weak)) uint8_t const* tud_descriptor_device_qualifier_cb(void);
 
 // Invoked when device is mounted (configured)
-__attribute__ ((weak)) void tud_mount_cb(void);
+//__attribute__ ((weak)) void tud_mount_cb(void);
+extern void tud_mount_cb(void);
 
 // Invoked when device is unmounted
-__attribute__ ((weak)) void tud_umount_cb(void);
+//__attribute__ ((weak)) void tud_umount_cb(void);
+extern void tud_umount_cb(void);
 
 // Invoked when usb bus is suspended
 // Within 7ms, device must draw an average of current less than 2.5 mA from bus
-__attribute__ ((weak)) void tud_suspend_cb(bool remote_wakeup_en);
+//__attribute__ ((weak)) void tud_suspend_cb(bool remote_wakeup_en);
+extern void tud_suspend_cb(bool remote_wakeup_en);
 
 // Invoked when usb bus is resumed
-__attribute__ ((weak)) void tud_resume_cb(void);
+//__attribute__ ((weak)) void tud_resume_cb(void);
+extern void tud_resume_cb(void);
 
 // Invoked when received control request with VENDOR TYPE
 __attribute__ ((weak)) bool tud_vendor_control_xfer_cb(uint8_t stage, tusb_control_request_t const * request);

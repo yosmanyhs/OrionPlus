@@ -3,20 +3,24 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "event_groups.h"
 
 
 
 #include "task_settings.h"
 #include "usb_task.h"
+#include "serial_task.h"
 #include "settings_manager.h"
 
 #include "tusb.h"
 #include "pins.h"
 
+#include "usbd.h"
+#include "cdc_device.h"
+
 TaskHandle_t usb_task_handle;
 
 static void usb_low_level_init(void);
-
 
 void USBTask_Entry(void * pvParam)
 {   
@@ -57,9 +61,42 @@ static void usb_low_level_init(void)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Invoked when device is mounted (configured)
+extern "C" void tud_mount_cb(void)
+{
+    //xTaskGenericNotify(serial_task_handle, 0, USB_EVENT_CONNECTED, eSetBits, NULL);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Invoked when device is unmounted
+extern "C" void tud_umount_cb(void)
+{
+    //xTaskGenericNotify(serial_task_handle, 0, USB_EVENT_DISCONNECTED, eSetBits, NULL);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Invoked when usb bus is suspended
+// Within 7ms, device must draw an average of current less than 2.5 mA from bus
+extern "C" void tud_suspend_cb(bool remote_wakeup_en)
+{
+    //xTaskGenericNotify(serial_task_handle, 0, USB_EVENT_SUSPENDED, eSetBits, NULL);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Invoked when usb bus is resumed
+extern "C" void tud_resume_cb(void)
+{
+    //xTaskGenericNotify(serial_task_handle, 0, USB_EVENT_RESUMED, eSetBits, NULL);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 extern "C" void OTG_FS_IRQHandler(void)
 {
     tud_int_handler();
 }
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////

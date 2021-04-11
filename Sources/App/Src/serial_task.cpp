@@ -11,17 +11,17 @@
 #include "task_settings.h"
 #include "user_tasks.h"
 #include "serial_task.h"
+#include "usb_task.h"
 #include "settings_manager.h"
 
 #include "uart_ports.h"
 #include "pins.h"
 
 #include "GCodeParser.h"
+#include "tusb.h"
+#include "cdc_device.h"
 
 TaskHandle_t serial_task_handle;
-
-static StreamBufferHandle_t     rx_buffer;
-static StreamBufferHandle_t     tx_buffer; 
 
 //const char* lines[] = 
 //{ 
@@ -49,35 +49,29 @@ static StreamBufferHandle_t     tx_buffer;
 //    "$120=10\r\n$121=10\r\n$122=10\r\n" \
 //    "$130=360\r\n$131=360\r\n$132=200\r\n";
 
-
 void SerialTask_Entry(void * pvParam)
-{
-    char ch;
-    char prev_ch;
-    char * line_buffer;
+{   
+    char * line;    
+    
+    char ch = 0;
+    char prev_ch = 0;
+    
     uint32_t ch_counter = 0;
+    uint32_t avail;
     bool allow_processing = false;   
     
-    // Create Tx & Rx stream buffers
-    rx_buffer = xStreamBufferCreate(RX_BUFFER_SIZE, 1);
-    tx_buffer = xStreamBufferCreate(TX_BUFFER_SIZE, 1);
-    line_buffer = (char*)pvPortMalloc(RX_BUFFER_SIZE + 1);
-    
-    if (rx_buffer == NULL || tx_buffer == NULL || line_buffer == NULL)
-    {
-        configASSERT(0);
-    }
-    
-    /* USART1 interrupt Init */
-    __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_RXNE);
-    
-    prev_ch = 0;
+    /* Reserve memory for line copy/processing */
+    line = new char[RX_BUFFER_SIZE + 1];
     
     for ( ; ; )
     {
-        // Try to receive data from serial stream
-        if (1 == xStreamBufferReceive(rx_buffer, (void*)&ch, 1, portMAX_DELAY))
+        // Try to receive data from CDC FIFO buffer
+        avail = tud_cdc_n_available(0);
+
+        if (avail != 0)
         {
+            ch = (char)tud_cdc_n_read_char(0);
+        
             if (ch_counter < (RX_BUFFER_SIZE + 1))
             {
                 // We still have space available in the line buffer
@@ -87,7 +81,7 @@ void SerialTask_Entry(void * pvParam)
                     if (prev_ch == '\r')
                         ch_counter--;
                     
-                    line_buffer[ch_counter] = '\0';
+                    line[ch_counter] = '\0';
                     
                     // Reset counter and call to process line 
                     // Not allow the modification of line_buffer during processing
@@ -104,37 +98,39 @@ void SerialTask_Entry(void * pvParam)
                 }
                 else
                 {
-                    line_buffer[ch_counter++] = ch;
+                    line[ch_counter++] = ch;
                     prev_ch = ch;
                 }
             }
             else
             {
                 // There is no more space available. Send the line 'as is'. 
-                line_buffer[RX_BUFFER_SIZE] = '\0';
+                line[RX_BUFFER_SIZE] = '\0';
                 allow_processing = true;
             }
         }
 
         if (allow_processing == true)
         {
-            const char* msg = machine->GetGCodeErrorText(machine->ParseGCodeLine(line_buffer));
-            size_t len;
+            const char* msg = machine->GetGCodeErrorText(machine->ParseGCodeLine(line));
             
-            // Send back response
-            len = strlen(line_buffer);
-            
-            if (len != 0)
-            {            
-                xStreamBufferSend(tx_buffer, (const void*)line_buffer, len, portMAX_DELAY);
-                xStreamBufferSend(tx_buffer, (const void*)(" >> "), 4, portMAX_DELAY);
+            // Send back response            
+            if (*line != '\0')
+            {
+                tud_cdc_n_write_str(0, line);
+                tud_cdc_n_write_str(0, " >> ");
             }
             
-            xStreamBufferSend(tx_buffer, (const void*)msg, strlen(msg), portMAX_DELAY);
-            xStreamBufferSend(tx_buffer, (const void*)("\r\n"), 2, portMAX_DELAY);
-            __HAL_UART_ENABLE_IT(&debug_uart_handle, UART_IT_TXE);
+            tud_cdc_n_write_str(0, msg);
+            tud_cdc_n_write_str(0, "\r\n");
+            tud_cdc_n_write_flush(0);
 
             allow_processing = false;            
+        }
+        else if (avail == 0)
+        {
+            // If there is nothing to process nor data available take a rest
+            vTaskDelay(pdMS_TO_TICKS(50));
         }
     }
 }
@@ -144,20 +140,12 @@ void SerialTask_Entry(void * pvParam)
 extern "C" void USART1_IRQHandler(void)
 {
     char ch;
-    BaseType_t highPrioWokenRx = pdFALSE;
-    BaseType_t highPrioWokenTx = pdFALSE;
-    BaseType_t highPrioWokenLine = pdFALSE;
     
     // Check if rx'd something
     if (__HAL_UART_GET_FLAG(&debug_uart_handle, UART_FLAG_RXNE))
     {
         // Rx Interrupt
         ch = (char)debug_uart_handle.Instance->DR;
-        
-        if (0 == xStreamBufferSendFromISR(rx_buffer, (const void*)&ch, 1, &highPrioWokenRx))
-        {
-           __nop();
-        }
     }
     
     if ( (__HAL_UART_GET_FLAG(&debug_uart_handle, UART_FLAG_TXE)) && 
@@ -166,18 +154,7 @@ extern "C" void USART1_IRQHandler(void)
         // Tx Interrupt
         /* The interrupt was caused by the THR becoming empty.  Are there any
 		more characters to transmit? */
-        if (xStreamBufferReceiveFromISR( tx_buffer, (void*) &ch, 1, &highPrioWokenTx) != pdFALSE)
-		{
-			/* A character was retrieved from the queue so can be sent to the
-			THR now. */
-            debug_uart_handle.Instance->DR = ch;
-		}
-		else
-		{
-            // Disable if no more data
-            __HAL_UART_DISABLE_IT(&debug_uart_handle, UART_IT_TXE);
-		}
+        // Disable if no more data
+        __HAL_UART_DISABLE_IT(&debug_uart_handle, UART_IT_TXE);
     }
-
-    portYIELD_FROM_ISR(highPrioWokenRx || highPrioWokenTx || highPrioWokenLine);   
 }
