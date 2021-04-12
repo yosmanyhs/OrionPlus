@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>LV_CONF_INCLUDE_SIMPLE, __USE_C99_MATH</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Sources\Configs;.\Sources\App\Inc;.\Sources\Drivers\Inc;.\Sources\OS\FreeRTOS\Inc;.\Sources\App\Inc\pages;.\Sources\Graphics\lvgl;.\Sources\Graphics\lvgl\src;.\Sources\Graphics\lvgl\src\lv_core;.\Sources\Graphics\lvgl\src\lv_draw;.\Sources\Graphics\lvgl\src\lv_font;.\Sources\Graphics\lvgl\src\lv_hal;.\Sources\Graphics\lvgl\src\lv_misc;.\Sources\Graphics\lvgl\src\lv_widgets;.\Sources\Graphics\lvgl\src\lv_themes;.\Sources\Graphics\lvgl\src\lv_drivers;.\Sources\OS\FreeRTOS\plus\fat\include;.\Sources\OS\FreeRTOS\plus\fat\portable\common</IncludePath>
+              <IncludePath>.\Sources\Configs;.\Sources\App\Inc;.\Sources\Drivers\Inc;.\Sources\OS\FreeRTOS\Inc;.\Sources\App\Inc\pages;.\Sources\Graphics\lvgl;.\Sources\Graphics\lvgl\src;.\Sources\Graphics\lvgl\src\lv_core;.\Sources\Graphics\lvgl\src\lv_draw;.\Sources\Graphics\lvgl\src\lv_font;.\Sources\Graphics\lvgl\src\lv_hal;.\Sources\Graphics\lvgl\src\lv_misc;.\Sources\Graphics\lvgl\src\lv_widgets;.\Sources\Graphics\lvgl\src\lv_themes;.\Sources\Graphics\lvgl\src\lv_drivers;.\Sources\OS\FreeRTOS\plus\fat\include;.\Sources\OS\FreeRTOS\plus\fat\portable\common;.\Sources\USB;.\Sources\USB\common;.\Sources\USB\device;.\Sources\USB\class\cdc;.\Sources\USB\class\hid</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
